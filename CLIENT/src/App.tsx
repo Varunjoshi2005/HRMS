@@ -3,24 +3,12 @@ import AppLayout from "./Layouts/AppLayout";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import { useEffect } from "react";
 import ProfileLayout from "./Layouts/ProfileLayout";
 import MainProfile from "./Comp/MainProfile";
 import Organization from "./pages/Organisation";
 
 function App() {
-  useEffect(() => {
-    const mainContent = document.querySelector(
-      "[data-mainContent]"
-    ) as HTMLElement;
-    const sidebar = document.querySelector("[data-sidebar]");
-    const navbar = document.querySelector("[data-navbar]") as HTMLElement;
-    if (mainContent && sidebar && navbar) {
-      mainContent.style.marginLeft = `${sidebar.clientWidth}px`;
-      mainContent.style.marginTop = `${navbar.clientHeight}px`;
-      console.log("running");
-    }
-  }, []);
+ 
 
   return (
     <>

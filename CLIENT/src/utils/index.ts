@@ -1,3 +1,4 @@
+import type { Employee } from "@/types";
 import {
   Home,
   User,
@@ -52,6 +53,83 @@ const dummyUsers = [
   { name: "Ankit", date: "16 October" },
   { name: "Ankit", date: "16 October" },
 ];
+
+const employees: Employee[] = [
+  {
+    id: 1,
+    name: "Abdul Raza",
+    role: "Software Engineer Consultant",
+    department: "Development",
+    location: "Mohali",
+    email: "abdul@arielsoftwares.in",
+    image: "https://randomuser.me/api/portraits/men/32.jpg",
+    businessUnit: "IT",
+    costCenter: "1002",
+    legacyEntry: "no"
+  },
+  {
+    id: 2,
+    name: "Abhishek Partap Singh",
+    role: "Software Trainee",
+    department: "Development",
+    location: "Mohali",
+    email: "abhishekp@arielsoftwares.in",
+    image: "https://randomuser.me/api/portraits/men/45.jpg",
+    businessUnit: "IT",
+    costCenter: "1002",
+    legacyEntry: "yes"
+  },
+  {
+    id: 3,
+    name: "Abhishek Sharma",
+    role: "Software Engineer",
+    department: "Development",
+    location: "Mohali",
+    email: "abhishek@arielsoftwares.in",
+    image: "https://randomuser.me/api/portraits/men/65.jpg",
+    businessUnit: "IT",
+    costCenter: "1002",
+    legacyEntry: "no"
+  },
+  {
+    id: 4,
+    name: "Akash Uniyal",
+    role: "Jr. Software Engineer",
+    department: "Development",
+    location: "Mohali",
+    email: "akash@arielsoftwares.in",
+    image: "https://randomuser.me/api/portraits/men/12.jpg",
+    businessUnit: "HR",
+    costCenter: "1001",
+    legacyEntry: "no"
+  },
+  {
+    id: 5,
+    name: "Akhil Mittal",
+    role: "Software Engineer",
+    department: "Development",
+    location: "Mohali",
+    email: "akhil@arielsoftwares.in",
+    image: "https://randomuser.me/api/portraits/men/28.jpg",
+    businessUnit: "Finance",
+    costCenter: "1003",
+    legacyEntry: "yes"
+  },
+  {
+    id: 6,
+    name: "Amandeep Singh",
+    role: "Software Engineer Consultant",
+    department: "Development",
+    location: "Mohali",
+    email: "amandeepsingh@arielsoftwares.in",
+    image: "https://randomuser.me/api/portraits/men/78.jpg",
+    businessUnit: "Operations",
+    costCenter: "1002",
+    legacyEntry: "no"
+  }
+];
+
+
 
 function getTime() {
   const date = new Date(Date.now());
@@ -113,4 +191,4 @@ function getWeekday(num: number) {
   }
 }
 
-export { Options, ProfileOptions, colors, profileItem, dummyUsers, getTime };
+export { Options, ProfileOptions, colors, profileItem, dummyUsers, getTime , employees };

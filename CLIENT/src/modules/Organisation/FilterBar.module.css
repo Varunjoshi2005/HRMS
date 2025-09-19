@@ -1,0 +1,153 @@
+:root {
+  --card-bg: #ffffff;
+  --page-bg: #f4f6f9;
+  --border: #e6e9ee;
+  --muted: #8d97a6;
+  --focus: #0b74ff;
+  --cell-height: 54px;
+  --radius: 8px;
+}
+
+.filtersWrap {
+  max-width: 1200px;
+  margin: 18px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filterCard {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  box-shadow: 0 6px 18px rgba(12, 20, 32, 0.04);
+}
+
+.filterCell {
+  padding: 12px;
+  min-height: var(--cell-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.filterCell:not(:last-child) {
+  border-right: 1px solid var(--border);
+}
+
+.selectWrap {
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+}
+
+select {
+  appearance: none;
+  width: 100%;
+  height: var(--cell-height);
+  padding: 10px 44px 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #e9edf3;
+  background: transparent;
+  font-size: 14px;
+  color: #1f2d3d;
+  cursor: pointer;
+  outline: none;
+}
+
+.selectWrap::after {
+  content: "";
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-35%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 7px solid #5b6b79;
+  pointer-events: none;
+}
+
+select:focus {
+  border-color: var(--focus);
+  box-shadow: 0 6px 18px rgba(11, 116, 255, 0.12);
+}
+
+.searchWrap {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.searchInput {
+  flex: 1;
+  height: var(--cell-height);
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #e9edf3;
+  font-size: 14px;
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: var(--muted);
+}
+
+.searchInput:focus {
+  border-color: var(--focus);
+  box-shadow: 0 6px 18px rgba(11, 116, 255, 0.12);
+}
+
+.searchBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  height: var(--cell-height);
+  border-radius: 6px;
+  border: none;
+  background: var(--focus);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.searchBtn svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.meta {
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 6px 0 0;
+}
+
+@media (max-width: 900px) {
+  .filterCard {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .filterCell:not(:last-child) {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+@media (max-width: 420px) {
+  .filterCard {
+    grid-template-columns: 1fr;
+  }
+  .filterCell {
+    padding: 10px;
+  }
+  .searchWrap {
+    flex-direction: row;
+  }
+}

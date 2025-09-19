@@ -1,0 +1,48 @@
+.topItems {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 12px;
+  padding: 5px;
+  background-color: #ebebeb;
+  height: 35px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.SelectedItem {
+  width: 100%;
+  height: 80px;
+  background-color: #ecfbff;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  font-size: 1.5rem;
+  border-top: 1px solid #c9c9c988;
+  border-bottom: 1px solid #c9c9c975;
+}
+
+.filterationSection {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 12px;
+  padding: 5px;
+  flex-direction: column;
+  height: 80px;
+}
+
+.topSectionItems {
+  display: flex;
+  width: 100%;
+}
+
+.topSectionItems .eachSection {
+  width: 20%;
+  border-top: 1px solid rgb(134, 134, 134);
+  border-right: 1px solid rgb(134, 134, 134);
+  border-bottom: 1px solid rgb(134, 134, 134);
+
+  height: 50px;
+}

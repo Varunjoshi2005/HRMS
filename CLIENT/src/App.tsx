@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import AppLayout from "./Layouts/AppLayout";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import { useEffect } from "react";
+import ProfileLayout from "./Layouts/ProfileLayout";
+import MainProfile from "./Comp/MainProfile";
+import Organization from "./pages/Organisation";
 
 function App() {
-  const [count, setCount] = useState(0)
+  useEffect(() => {
+    const mainContent = document.querySelector(
+      "[data-mainContent]"
+    ) as HTMLElement;
+    const sidebar = document.querySelector("[data-sidebar]");
+    const navbar = document.querySelector("[data-navbar]") as HTMLElement;
+    if (mainContent && sidebar && navbar) {
+      mainContent.style.marginLeft = `${sidebar.clientWidth}px`;
+      mainContent.style.marginTop = `${navbar.clientHeight}px`;
+      console.log("running");
+    }
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Signup />} />
+          <Route path="/" element={<AppLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="/profile" element={<ProfileLayout />}>
+              <Route index element={<MainProfile />} />
+              <Route path="other" element={<div>Hi this is other</div>} />
+            </Route>
+            <Route path="/org" element={<Organization />} />
+            <Route path="/other" element={<div>Other route</div>} />
+            // Add more routes here as needed
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

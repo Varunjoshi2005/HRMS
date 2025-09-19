@@ -1,0 +1,99 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+}
+.centerContainer {
+  display: flex;
+}
+.TopStrip {
+  width: 100%;
+  flex-direction: column;
+  padding: 10px;
+  font-size: 13px;
+  display: flex;
+  gap: 20px;
+}
+
+.wallpaperContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-image: url("../assets/wallpaper.png");
+  width: 600px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.wallpaperText {
+  font-size: 1.5rem;
+  color: white;
+  margin-left: 10px;
+  font-weight: bolder;
+}
+.TopStrip span {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.eachContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 10px;
+  width: 400px;
+  height: auto;
+}
+
+.smallInfoContainer {
+  height: 120px;
+  display: flex;
+  color: white;
+  font-weight: bolder;
+  padding: 20px;
+  flex-direction: column;
+  border-radius: 5px;
+}
+
+.GivePraiseContainer {
+  height: 120px;
+  flex-direction: column;
+}
+
+.centerContainerLayout {
+  display: flex;
+  background-color: rgb(231, 231, 231);
+  padding: 10px;
+  width: 450px;
+
+  border-radius: 10px;
+}
+
+.GivePraiseContainer input {
+  width: 90%;
+  height: 30px;
+  margin-top: 10px;
+  border: none;
+  outline: none;
+}
+
+.teamInfoContainer {
+  display: flex;
+  gap: 20px;
+  font-size: 12px;
+}
+
+.teamInfoContainer span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+  border-bottom: 2px solid transparent;
+}
+
+.teamInfoContainer span:hover {
+  border-bottom: 2px solid rgb(0, 140, 255);
+}

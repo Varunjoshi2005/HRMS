@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+:root {
+  background: white;
+}
+
+html,
+body {
+  background-color: white;
+  overflow-x: hidden;
+  font-family: sans-serif;
+}

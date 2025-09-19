@@ -1,0 +1,38 @@
+.ProfileIcon {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: aqua;
+}
+
+.dropDownProfileBox {
+  position: absolute;
+  height: 200px;
+  width: 200px;
+  left: -180px;
+  top: 30px;
+  background: #fff;
+  box-shadow: 2px 2px 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dropDownProfileBox div {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px;
+  font-weight: lighter;
+  font-size: 12px;
+  border-bottom: 1px solid #ccc;
+  color: black;
+  cursor: pointer;
+}
+
+.dropDownProfileBox div:hover {
+  background-color: #f0f0f0;
+}

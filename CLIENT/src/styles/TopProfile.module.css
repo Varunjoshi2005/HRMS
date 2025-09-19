@@ -1,0 +1,49 @@
+.profileContainer {
+  width: 100%;
+  height: 300px;
+}
+
+.userProfile {
+  padding: 10px;
+  gap: 30px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: flex;
+}
+.userInfoBox {
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  height: auto;
+}
+
+.userDetails {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+.userDetails span {
+  font-size: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.profileOptions {
+  display: flex;
+  margin-top: 2px;
+  gap: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  opacity: 0.7;
+  padding: 10px;
+}
+
+.profileOption {
+  border-bottom: 1px solid transparent;
+}
+
+.profileOption:hover {
+  border-bottom: 1px solid blue;
+}

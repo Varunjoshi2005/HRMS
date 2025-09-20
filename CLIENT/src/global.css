@@ -1,13 +1,15 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-
 :root {
   background: white;
 }
 
 html,
 body {
-  background-color: white;
+  background-color: rgb(241, 241, 241);
   overflow-x: hidden;
-  font-family: sans-serif;
+   font-family: 'Inter', 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif;
+
+ 
 }

@@ -5,7 +5,6 @@
   --muted: #8d97a6;
   --focus: #0b74ff;
   --cell-height: 54px;
-  --radius: 8px;
 }
 
 .filtersWrap {
@@ -20,7 +19,6 @@
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   overflow: hidden;
-  border-radius: var(--radius);
   background: var(--card-bg);
   border: 1px solid var(--border);
   box-shadow: 0 6px 18px rgba(12, 20, 32, 0.04);
@@ -50,7 +48,6 @@ select {
   width: 100%;
   height: var(--cell-height);
   padding: 10px 44px 10px 14px;
-  border-radius: 6px;
   border: 1px solid #e9edf3;
   background: transparent;
   font-size: 14px;

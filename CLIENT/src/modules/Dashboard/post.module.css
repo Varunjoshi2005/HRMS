@@ -1,0 +1,50 @@
+.postContainer {
+    padding: 0px;
+    height: auto;
+}
+
+.SinglePostContainer {
+    height: 500px;
+    width: 100%;
+    background: #fff;
+}
+
+
+
+.topBarItems {
+    display: flex;
+    width: 100%;
+    height: 50px;
+    margin-bottom: 5px;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.postInfo {
+    height: inherit;
+    display: flex;
+    gap: 20px;
+}
+
+.userPost {
+    width: 100%;
+    height: 82%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+.postActions {
+    width: 100%;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #ccc;
+}
+
+
+hr { 
+    color : rgb(0, 149, 255)
+}

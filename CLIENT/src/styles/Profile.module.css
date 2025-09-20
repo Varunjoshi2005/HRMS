@@ -8,7 +8,7 @@
   height: 30px;
   border-radius: 50%;
   object-fit: cover;
-  background-color: aqua;
+  background-color: rgb(255, 77, 0);
 }
 
 .dropDownProfileBox {
@@ -36,3 +36,5 @@
 .dropDownProfileBox div:hover {
   background-color: #f0f0f0;
 }
+
+

@@ -17,7 +17,7 @@ nav {
   align-items: center;
   background-color: #395cbb;
   font-size: 1.2rem;
-  width: 100px;
+  min-width: 100px;
   height: 50px;
 }
 
@@ -27,16 +27,29 @@ nav {
   align-items: center;
   background-color: white;
   border-radius: 10px;
-  padding: 5px;
-  width: 30%;
+  padding: 6px;
+  width: 40%;
 }
 
 .search input {
   color: black;
   background-color: transparent;
   border: none;
-  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
   font-size: 13px;
   font-weight: 500;
   outline: none;
+}
+
+.shortcut {
+  background-color: rgb(230, 230, 230);
+  color: black;
+  cursor: pointer;
+  margin-left: 5px;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
 }

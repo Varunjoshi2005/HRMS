@@ -28,6 +28,55 @@ const Options = [
   { name: "Learn", icon: BookOpen, link: "/learn" },
 ];
 
+const MenuMoreOptions = new Map<string, any[]>([
+  ["Me", [
+    { name: "Attendance", link: "/attendance" },
+    { name: "Leave", link: "/leave" },
+    { name: "Performance", link: "/performance" },
+    { name: "Expenses & Travel", link: "/expenses" },
+    { name: "Helpdesk", link: "/helpdesk" },
+    { name: "Rewards", link: "/rewards" },
+    { name: "Apps", link: "/apps" }
+  ]],
+  ["My Finance", [
+    { name: "Summary", link: "/my-finance/summary" },
+    { name: "My Pay", link: "/my-finance/pay" },
+    { name: "Manage Tax", link: "/my-finance/tax" }
+  ]],
+  ["Org", [
+    { name: "Employees", link: "/org/employees" },
+    { name: "Documents", link: "/org/documents" },
+    { name: "Engage", link: "/org/engage" },
+    { name: "Hiring", link: "/org/hiring" }
+  ]],
+  ["My teams", [
+    { name: "Summary", link: "/my-teams/summary" }
+  ]],
+
+  ["Performance", [
+    { name: "KRAs", link: "/performance/kras" },
+    { name: "1:1 Meetings", link: "/performance/meetings" },
+    { name: "Skills", link: "/performance/skills" },
+    { name: "Growth", link: "/performance/growth" }
+  ]],
+
+  ["Learn", [
+    { name: "Course Library", link: "/learn/library" },
+    { name: "My Courses", link: "/learn/my-courses" }
+  ]],
+
+  ["Engage", [
+    { name: "Announcements", link: "/engage/announcements" },
+    { name: "Rewards", link: "/engage/rewards" },
+    { name: "Polls", link: "/engage/polls" },
+    { name: "Articles", link: "/engage/articles" }
+  ]]
+
+]);
+
+
+
+
 const ProfileOptions = [
   { name: "View profile", link: "/profile", icon: User },
   { name: "Change Password", link: "/settings", icon: Key },
@@ -191,4 +240,4 @@ function getWeekday(num: number) {
   }
 }
 
-export { Options, ProfileOptions, colors, profileItem, dummyUsers, getTime , employees };
+export { Options, ProfileOptions, colors, profileItem, dummyUsers, getTime, employees, MenuMoreOptions };

@@ -23,6 +23,9 @@ function Navbar() {
             type="text"
             placeholder="Search employees or actions (Ex Apply Leave)"
           />
+          <div className={styles.shortcut}>
+            <span>Alt+K</span>
+          </div>
         </div>
       </div>
 

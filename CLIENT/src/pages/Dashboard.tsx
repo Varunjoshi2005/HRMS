@@ -3,7 +3,8 @@ import { getTime } from "@/utils";
 import cakeLogo from "@/assets/birthday-cake.png";
 import partyPopper from "@/assets/party-popper.png";
 import team from "@/assets/team.png";
-import Birthdays from "@/modules/Dashboard/birthdays";
+import Birthdays from "@/modules/Dashboard/Birthdays";
+import Posts from "@/modules/Dashboard/Posts";
 function Dashboard() {
   return (
     <div className={styles.mainContainer}>
@@ -20,7 +21,7 @@ function Dashboard() {
           >
             <span>Quick Access</span>
             <div
-              style={{ background: "#9C84B8" }}
+              style={{ background: "#9A7EBE" }}
               className={styles.smallInfoContainer}
             >
               <span>Quick Link</span>
@@ -30,7 +31,7 @@ function Dashboard() {
               </div>
             </div>
             <div
-              style={{ background: "#B3A66A" }}
+              style={{ background: "#B8AA73" }}
               className={styles.smallInfoContainer}
             >
               <span>On Leave Today</span>
@@ -44,7 +45,7 @@ function Dashboard() {
             </div>
             <div className={styles.smallInfoContainer}></div>
             <div
-              style={{ background: "#5FC1C9" }}
+              style={{ background: "#47ccde" }}
               className={styles.smallInfoContainer}
             >
               <span>
@@ -55,14 +56,14 @@ function Dashboard() {
               <span>03:25 pm</span>
             </div>
             <div
-              style={{ background: "#C58BB2" }}
+              style={{ background: "#fd6ab9" }}
               className={styles.smallInfoContainer}
             ></div>
           </div>
         </div>
 
         <div className={styles.eachContainer}>
-          <div style={{ gap: "10px" }} className={styles.centerContainerLayout}>
+          <div style={{ gap: "10px", fontSize: "12px" }} className={styles.centerContainerLayout}>
             <span>ORGANIZATION : </span>
             <span>Ariel software solutions</span>
           </div>
@@ -73,7 +74,7 @@ function Dashboard() {
             <input type="text" placeholder="Give praise from here.." />
           </div>
           <div className={styles.centerContainerLayout}>
-            <span>No announcements</span>
+            <span style={{ fontSize: "12px" }}>No announcements</span>
           </div>
 
           <div className={styles.centerContainerLayout}>
@@ -98,6 +99,32 @@ function Dashboard() {
           <div className={styles.centerContainerLayout}>
             <Birthdays />
           </div>
+
+
+          <div className={styles.feedContainer}>
+
+            <div className={`${styles.centerContainerLayout} ${styles.surveyCard}`}>
+              <h4>This week's Pulse Survey is ready!</h4>
+              <p>Share your valuable feedback to make your workplace even better.</p>
+              <button className={styles.startPulse}>🚀 Start Pulse</button>
+            </div>
+
+            <div className={`${styles.centerContainerLayout} ${styles.surveyCard}`}>
+              <h4>Ritababaygfjug</h4>
+              <p>Share your valuable feedback to make your workplace even better.</p>
+              <small>DEADLINE: 31 Aug 2025</small>
+              <button className={`${styles.takeSurvey}`}>Take Survey</button>
+            </div>
+          </div>
+
+          {
+            [1, 2, 3, 4, 5].map((item) => (
+              <Posts key={item} />
+            ))
+          }
+
+
+
         </div>
       </main>
     </div>

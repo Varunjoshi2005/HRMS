@@ -2,9 +2,11 @@
   display: flex;
   flex-direction: column;
 }
+
 .centerContainer {
   display: flex;
 }
+
 .TopStrip {
   width: 100%;
   flex-direction: column;
@@ -32,6 +34,7 @@
   margin-left: 10px;
   font-weight: bolder;
 }
+
 .TopStrip span {
   cursor: pointer;
   opacity: 0.7;
@@ -63,11 +66,12 @@
 
 .centerContainerLayout {
   display: flex;
-  background-color: rgb(231, 231, 231);
+  background: #fff;
+
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   padding: 10px;
   width: 450px;
 
-  border-radius: 10px;
 }
 
 .GivePraiseContainer input {
@@ -97,3 +101,60 @@
 .teamInfoContainer span:hover {
   border-bottom: 2px solid rgb(0, 140, 255);
 }
+
+
+.feedContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+}
+
+
+.surveyCard {
+  flex-direction: column;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.surveyCard h4 {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.surveyCard p {
+  font-size: 13px;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.surveyCard small {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #777;
+}
+
+.startPulse {
+  background: #0066ff;
+  font-size: 13px;
+  width: 120px;
+  color: #fff;
+  border: none;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.takeSurvey {
+  background: #0066ff;
+  color: #fff;
+  font-size: 13px;
+  width: 120px;
+  border: none;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+

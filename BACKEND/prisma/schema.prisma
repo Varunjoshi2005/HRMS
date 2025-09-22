@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String           @id @default(uuid())
+  email            String           @unique
+  cardId           String
+  workLocation     String
+  name             String
+  password         String
+  profileUrl       String?
+  phoneNumber      String
+  role             String           @default("USER")
+  businessUnit     String
+  department       String
+  reportManager    String
+  personalDetails  PrimaryDetails?
+  contactDetails   ContactDetails?
+  addressDetails   AddressDetails?
+  indentityDetails IdentityDetails?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+}
+
+model PrimaryDetails {
+  id                 String   @id @default(uuid())
+  user               User     @relation(fields: [userId], references: [id])
+  userId             String   @unique
+  firstName          String
+  middleName         String?
+  lastName           String
+  gender             String
+  displayName        String
+  dob                String
+  maritalStatus      Boolean
+  bloodGroup         String
+  physicallyHandicap Boolean
+  nationality        String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model ContactDetails {
+  id              String   @id @default(uuid())
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String   @unique
+  workEmail       String
+  personalEmail   String
+  mobileNumber    String
+  workNumber      String?
+  residenceNumber String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model AddressDetails {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @unique
+  address   String
+  zipCode   String
+  city      String
+  state     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model IdentityDetails {
+  id            String          @id @default(uuid())
+  user          User            @relation(fields: [userId], references: [id])
+  userId        String          @unique
+  addharDetails AddharDetails?
+  panDetails    PanCardDetails?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model AddharDetails {
+  id           String          @id @default(uuid())
+  identity     IdentityDetails @relation(fields: [identityId], references: [id])
+  identityId   String          @unique
+  name         String
+  addharNumber String          @unique
+  gender       String
+  dob          String
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+}
+
+model PanCardDetails {
+  id            String          @id @default(uuid())
+  identity      IdentityDetails @relation(fields: [identityId], references: [id])
+  identityId    String          @unique
+  applicantName String
+  fatherName    String
+  panNumber     String
+  dob           String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}

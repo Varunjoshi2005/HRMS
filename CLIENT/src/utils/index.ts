@@ -29,57 +29,69 @@ const Options = [
 ];
 
 const MenuMoreOptions = new Map<string, any[]>([
-  ["Me", [
-    { name: "Attendance", link: "/attendance" },
-    { name: "Leave", link: "/leave" },
-    { name: "Performance", link: "/performance" },
-    { name: "Expenses & Travel", link: "/expenses" },
-    { name: "Helpdesk", link: "/helpdesk" },
-    { name: "Rewards", link: "/rewards" },
-    { name: "Apps", link: "/apps" }
-  ]],
-  ["My Finance", [
-    { name: "Summary", link: "/my-finance/summary" },
-    { name: "My Pay", link: "/my-finance/pay" },
-    { name: "Manage Tax", link: "/my-finance/tax" }
-  ]],
-  ["Org", [
-    { name: "Employees", link: "/org/employees" },
-    { name: "Documents", link: "/org/documents" },
-    { name: "Engage", link: "/org/engage" },
-    { name: "Hiring", link: "/org/hiring" }
-  ]],
-  ["My teams", [
-    { name: "Summary", link: "/my-teams/summary" }
-  ]],
+  [
+    "Me",
+    [
+      { name: "Attendance", link: "/attendance" },
+      { name: "Leave", link: "/leave" },
+      { name: "Performance", link: "/performance" },
+      { name: "Expenses & Travel", link: "/expenses" },
+      { name: "Helpdesk", link: "/helpdesk" },
+      { name: "Rewards", link: "/rewards" },
+      { name: "Apps", link: "/apps" },
+    ],
+  ],
+  [
+    "My Finance",
+    [
+      { name: "Summary", link: "/my-finance/summary" },
+      { name: "My Pay", link: "/my-finance/pay" },
+      { name: "Manage Tax", link: "/my-finance/tax" },
+    ],
+  ],
+  [
+    "Org",
+    [
+      { name: "Employees", link: "/org/employees" },
+      { name: "Documents", link: "/org/documents" },
+      { name: "Engage", link: "/org/engage" },
+      { name: "Hiring", link: "/org/hiring" },
+    ],
+  ],
+  ["My teams", [{ name: "Summary", link: "/my-teams/summary" }]],
 
-  ["Performance", [
-    { name: "KRAs", link: "/performance/kras" },
-    { name: "1:1 Meetings", link: "/performance/meetings" },
-    { name: "Skills", link: "/performance/skills" },
-    { name: "Growth", link: "/performance/growth" }
-  ]],
+  [
+    "Performance",
+    [
+      { name: "KRAs", link: "/performance/kras" },
+      { name: "1:1 Meetings", link: "/performance/meetings" },
+      { name: "Skills", link: "/performance/skills" },
+      { name: "Growth", link: "/performance/growth" },
+    ],
+  ],
 
-  ["Learn", [
-    { name: "Course Library", link: "/learn/library" },
-    { name: "My Courses", link: "/learn/my-courses" }
-  ]],
+  [
+    "Learn",
+    [
+      { name: "Course Library", link: "/learn/library" },
+      { name: "My Courses", link: "/learn/my-courses" },
+    ],
+  ],
 
-  ["Engage", [
-    { name: "Announcements", link: "/engage/announcements" },
-    { name: "Rewards", link: "/engage/rewards" },
-    { name: "Polls", link: "/engage/polls" },
-    { name: "Articles", link: "/engage/articles" }
-  ]]
-
+  [
+    "Engage",
+    [
+      { name: "Announcements", link: "/engage/announcements" },
+      { name: "Rewards", link: "/engage/rewards" },
+      { name: "Polls", link: "/engage/polls" },
+      { name: "Articles", link: "/engage/articles" },
+    ],
+  ],
 ]);
-
-
-
 
 const ProfileOptions = [
   { name: "View profile", link: "/profile", icon: User },
-  { name: "Change Password", link: "/settings", icon: Key },
+  { name: "Change Password", link: "/change-password", icon: Key },
   { name: "Logout", link: "/logout", icon: Power },
 ];
 
@@ -114,7 +126,7 @@ const employees: Employee[] = [
     image: "https://randomuser.me/api/portraits/men/32.jpg",
     businessUnit: "IT",
     costCenter: "1002",
-    legacyEntry: "no"
+    legacyEntry: "no",
   },
   {
     id: 2,
@@ -126,7 +138,7 @@ const employees: Employee[] = [
     image: "https://randomuser.me/api/portraits/men/45.jpg",
     businessUnit: "IT",
     costCenter: "1002",
-    legacyEntry: "yes"
+    legacyEntry: "yes",
   },
   {
     id: 3,
@@ -138,7 +150,7 @@ const employees: Employee[] = [
     image: "https://randomuser.me/api/portraits/men/65.jpg",
     businessUnit: "IT",
     costCenter: "1002",
-    legacyEntry: "no"
+    legacyEntry: "no",
   },
   {
     id: 4,
@@ -150,7 +162,7 @@ const employees: Employee[] = [
     image: "https://randomuser.me/api/portraits/men/12.jpg",
     businessUnit: "HR",
     costCenter: "1001",
-    legacyEntry: "no"
+    legacyEntry: "no",
   },
   {
     id: 5,
@@ -162,7 +174,7 @@ const employees: Employee[] = [
     image: "https://randomuser.me/api/portraits/men/28.jpg",
     businessUnit: "Finance",
     costCenter: "1003",
-    legacyEntry: "yes"
+    legacyEntry: "yes",
   },
   {
     id: 6,
@@ -174,11 +186,9 @@ const employees: Employee[] = [
     image: "https://randomuser.me/api/portraits/men/78.jpg",
     businessUnit: "Operations",
     costCenter: "1002",
-    legacyEntry: "no"
-  }
+    legacyEntry: "no",
+  },
 ];
-
-
 
 function getTime() {
   const date = new Date(Date.now());
@@ -240,4 +250,13 @@ function getWeekday(num: number) {
   }
 }
 
-export { Options, ProfileOptions, colors, profileItem, dummyUsers, getTime, employees, MenuMoreOptions };
+export {
+  Options,
+  ProfileOptions,
+  colors,
+  profileItem,
+  dummyUsers,
+  getTime,
+  employees,
+  MenuMoreOptions,
+};

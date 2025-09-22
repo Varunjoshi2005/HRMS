@@ -2,10 +2,13 @@ import { colors, ProfileOptions } from "@/utils";
 import styles from "../styles/Profile.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "@/context/UserContext";
+import { ACTIONS } from "@/types";
 
 function Profile() {
   const [toogleBoxVisisble, setToogleBoxVisible] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { dispatch } = useUserContext();
   return (
     <>
       <div
@@ -20,7 +23,19 @@ function Profile() {
               return (
                 <div>
                   <Icon color="gray" size={18} />
-                  <span onClick={() => navigate(each.link)}>{each.name}</span>
+                  <span
+                    onClick={() => {
+                      if (each.link == "/logout") {
+                        dispatch({ type: ACTIONS.REMOVE_USER });
+                        localStorage.removeItem("user-details");
+                        navigate("/login");
+                        return;
+                      }
+                      navigate(each.link);
+                    }}
+                  >
+                    {each.name}
+                  </span>
                 </div>
               );
             })}

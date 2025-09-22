@@ -1,0 +1,43 @@
+.profileInfoContainer {
+  padding: 10px;
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+
+.primaryAndContact {
+  display: flex;
+  gap: 20px;
+}
+
+.boxContainer {
+  width: 50%;
+  padding: 5px;
+  height: 520px;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.288);
+  border: 1px solid rgba(196, 196, 196, 0.589);
+}
+
+.innerDetails {
+  width: 100%;
+  font-size: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+#verification {
+  padding: 3px;
+  color: white;
+  font-size: 12px;
+  font-weight: bolder;
+  background-color: rgb(56, 197, 51);
+  border-radius: 5px;
+}
+
+#innerInfo {
+  opacity: 0.7;
+  display: flex;
+  flex-direction: column;
+}

@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import { TokenUser } from "../types";
 import RoleModel from "../models/roleDoc";
 import UserRoleModel from "../models/userRoleDoc";
+import { generateOTP, holdedUsers, transporter } from "../utils";
 
 class UserServices {
   UserRegister = async (req: Request, res: Response) => {
@@ -89,15 +90,69 @@ class UserServices {
         return;
       }
 
-      res
-        .status(200)
-        .json({ message: "logged in Successfully!!", data: data.data });
+      holdedUsers.set(userData.id, data.data);
+
+      this.GenerateAndSendOTP(userData.email);
+
+      res.status(200).json({ message: "OTP sent !!" });
       return;
-    } catch (error) {
+    } catch (error: any) {
       res.status(505).json({ error: `Internal server error ${error.message}` });
       return;
     }
   };
+
+  GenerateAndSendOTP = (userEmail: string) => {
+    const OTP = generateOTP();
+
+    transporter
+      .sendMail({
+        from: `"Your Company" <${process.env.EMAIL_USER}>`,
+        to: userEmail,
+        subject: "✅ Your OTP Code",
+        text: `Here is your OTP code to continue: ${OTP}`,
+        html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 10px;">
+        
+        <!-- Header -->
+        <div style="text-align: center; padding-bottom: 20px; border-bottom: 1px solid #eee;">
+          <h2 style="color: #2c3e50; margin: 0;">Your Company</h2>
+          <p style="color: #888; font-size: 14px; margin: 5px 0 0;">Official Notification</p>
+        </div>
+        
+        <!-- Body -->
+        <div style="padding: 20px; color: #333;">
+          <p style="font-size: 16px;">Hello,</p>
+          <p style="font-size: 14px; line-height: 1.6;">
+            Your One-Time Password (OTP) for verification is:
+          </p>
+          <div style="text-align: center; margin: 30px 0;">
+            <p style="font-size: 24px; font-weight: bold; color: #4CAF50; letter-spacing: 2px;">
+              12345
+            </p>
+          </div>
+          <p style="font-size: 14px; color: #555;">
+            This OTP will expire in <strong>10 minutes</strong>. Please do not share it with anyone for security reasons.
+          </p>
+        </div>
+        
+        <!-- Footer -->
+        <div style="text-align: center; font-size: 12px; color: #999; padding-top: 20px; border-top: 1px solid #eee;">
+          &copy; 2025 Your Company. All rights reserved.<br/>
+          This is an automated email, please do not reply.
+        </div>
+      </div>
+    `,
+      })
+      .then(() => console.log("OTP SENT"))
+      .catch((err) => {
+        console.log(err);
+      });
+
+    return;
+  };
+
+  ValidateOTP = (req: Request, res: Response) => {};
 }
 
 export const userServices = new UserServices();

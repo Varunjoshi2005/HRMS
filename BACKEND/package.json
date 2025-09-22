@@ -4,7 +4,7 @@
   "main": "./src/server.ts",
   "type": "commonjs",
   "scripts": {
-    "seed" : "ts-node ./src/scripts/seeder.ts",
+    "seed": "ts-node ./src/scripts/seeder.ts",
     "start": "nodemon ./src/server.ts"
   },
   "keywords": [],
@@ -18,11 +18,13 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.5.1",
+    "@types/nodemailer": "^7.0.1",
     "@types/nodemon": "^1.19.6",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@prisma/client": "^6.16.2",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
@@ -30,6 +32,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.1",
     "multer": "^2.0.2",
-    "nodemon": "^3.1.10"
+    "nodemailer": "^7.0.6",
+    "nodemon": "^3.1.10",
+    "prisma": "^6.16.2"
   }
 }

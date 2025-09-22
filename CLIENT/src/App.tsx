@@ -1,22 +1,29 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AppLayout from "./Layouts/AppLayout";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 import ProfileLayout from "./Layouts/ProfileLayout";
 import MainProfile from "./Comp/MainProfile";
 import Organization from "./pages/Organisation";
+import { useUserContext } from "./context/UserContext";
 
 function App() {
- 
+  const { user } = useUserContext();
+  console.log("here", user);
 
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Signup />} />
-          <Route path="/" element={<AppLayout />}>
+          <Route
+            path="/login"
+            element={!user ? <Login /> : <Navigate to={"/"} />}
+          />
+
+          <Route
+            path="/"
+            element={user ? <AppLayout /> : <Navigate to={"/login"} />}
+          >
             <Route index element={<Dashboard />} />
             <Route path="/profile" element={<ProfileLayout />}>
               <Route index element={<MainProfile />} />

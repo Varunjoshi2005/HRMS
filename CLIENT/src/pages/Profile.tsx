@@ -1,17 +1,18 @@
 import styles from "@/styles/MainProfile.module.css";
 import { Mail, Phone, MapPin, IdCard } from "lucide-react";
 import userLogo from "@/assets/userLogo.jpg";
+import { useState } from "react";
+import type { TabType } from "@/types";
+import Tab from "@/modules/Profile/Tabs";
 
 function Profile() {
+  const [currentTab, setTab] = useState<TabType>({ type: "about" });
+
   return (
     <div className={styles.profileContainer}>
       <div className={styles.coverSection}>
         <div className={styles.avatarContainer}>
-          <img
-            src={userLogo}
-            alt="User"
-            className={styles.avatar}
-          />
+          <img src={userLogo} alt="User" className={styles.avatar} />
         </div>
         <div className={styles.userInfo}>
           <h2 className={styles.userName}>Varun Joshi</h2>
@@ -22,10 +23,12 @@ function Profile() {
       <div className={styles.infoSection}>
         <div className={styles.infoItem}>
           <Mail size={16} />
-          <a href="https://mail.google.com/mail/u/0/#inbox" style={{ color: "blue", cursor: "pointer" }}>
+          <a
+            href="https://mail.google.com/mail/u/0/#inbox"
+            style={{ color: "blue", cursor: "pointer" }}
+          >
             varunjoshi12@gmail.com
           </a>
-
         </div>
         <div className={styles.infoItem}>
           <Phone size={16} /> +91-6283312114
@@ -54,24 +57,39 @@ function Profile() {
       </div>
 
       <div className={styles.tabs}>
-        <span className={styles.active}>About</span>
-        <span>Profile</span>
-        <span>Job</span>
-        <span>Documents</span>
-        <span>Assets</span>
+        <span
+          className={`${currentTab.type == "about" && styles.active}`}
+          onClick={() => setTab({ type: "about" })}
+        >
+          About
+        </span>
+        <span
+          className={`${currentTab.type == "profile" && styles.active}`}
+          onClick={() => setTab({ type: "profile" })}
+        >
+          Profile
+        </span>
+        <span
+          className={`${currentTab.type == "job" && styles.active}`}
+          onClick={() => setTab({ type: "job" })}
+        >
+          Job
+        </span>
+        <span
+          className={`${currentTab.type == "document" && styles.active}`}
+          onClick={() => setTab({ type: "document" })}
+        >
+          Documents
+        </span>
+        <span
+          className={`${currentTab.type == "assets" && styles.active}`}
+          onClick={() => setTab({ type: "assets" })}
+        >
+          Assets
+        </span>
       </div>
 
-      <div className={styles.aboutSection}>
-        <h3>About</h3>
-        <div className={styles.aboutField}>
-          <label>What I love about my job?</label>
-          <input type="text" placeholder="Add your response" />
-        </div>
-        <div className={styles.aboutField}>
-          <label>My interests and hobbies</label>
-          <input type="text" placeholder="Add your response" />
-        </div>
-      </div>
+      <Tab currentTab={currentTab} />
     </div>
   );
 }

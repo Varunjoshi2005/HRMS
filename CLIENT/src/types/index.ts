@@ -6,9 +6,17 @@ export interface Employee {
   location: string;
   email: string;
   image: string;
-  businessUnit: string;   // new
-  costCenter: string;     // new
-  legacyEntry: "yes" | "no"; // new
-  code?: string;          // optional if you want code search
+  businessUnit: string;
+  costCenter: string;
+  legacyEntry: "yes" | "no";
+  code?: string;
 }
 
+export const ACTIONS = {
+  SET_USER: "set-user",
+  REMOVE_USER: "remove-user",
+} as const;
+
+export interface TabType {
+  type: "about" | "profile" | "job" | "document" | "assets";
+}

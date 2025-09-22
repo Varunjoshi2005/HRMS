@@ -107,7 +107,7 @@ class UserServices {
 
     transporter
       .sendMail({
-        from: `"Your Company" <${process.env.EMAIL_USER}>`,
+        from: `"HIRE-LINK" <${process.env.EMAIL_USER}>`,
         to: userEmail,
         subject: "✅ Your OTP Code",
         text: `Here is your OTP code to continue: ${OTP}`,
@@ -116,7 +116,7 @@ class UserServices {
         
         <!-- Header -->
         <div style="text-align: center; padding-bottom: 20px; border-bottom: 1px solid #eee;">
-          <h2 style="color: #2c3e50; margin: 0;">Your Company</h2>
+          <h2 style="color: #2c3e50; margin: 0;">HIRE-LINK</h2>
           <p style="color: #888; font-size: 14px; margin: 5px 0 0;">Official Notification</p>
         </div>
         
@@ -128,7 +128,7 @@ class UserServices {
           </p>
           <div style="text-align: center; margin: 30px 0;">
             <p style="font-size: 24px; font-weight: bold; color: #4CAF50; letter-spacing: 2px;">
-              12345
+             ${OTP}
             </p>
           </div>
           <p style="font-size: 14px; color: #555;">
@@ -138,7 +138,7 @@ class UserServices {
         
         <!-- Footer -->
         <div style="text-align: center; font-size: 12px; color: #999; padding-top: 20px; border-top: 1px solid #eee;">
-          &copy; 2025 Your Company. All rights reserved.<br/>
+          &copy; 2025 Your HIRE-LINK. All rights reserved.<br/>
           This is an automated email, please do not reply.
         </div>
       </div>

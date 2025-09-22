@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import nodemailer from "nodemailer";
 
-const holdedUsers = new Map<mongoose.Types.ObjectId, any>();
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -16,4 +15,4 @@ const generateOTP = () => {
   return randomOTP;
 };
 
-export { transporter, holdedUsers, generateOTP };
+export { transporter , generateOTP };

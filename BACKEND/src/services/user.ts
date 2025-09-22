@@ -5,9 +5,14 @@ import bcrypt from "bcryptjs";
 import { TokenUser } from "../types";
 import RoleModel from "../models/roleDoc";
 import UserRoleModel from "../models/userRoleDoc";
-import { generateOTP, holdedUsers, transporter } from "../utils";
+import { generateOTP,  transporter } from "../utils";
+import { holdedUsers } from "../global";
+
+
+
 
 class UserServices {
+
   UserRegister = async (req: Request, res: Response) => {
     try {
       const { username, email, password } = req.body;
@@ -90,11 +95,13 @@ class UserServices {
         return;
       }
 
-      holdedUsers.set(userData.id, data.data);
 
-      this.GenerateAndSendOTP(userData.email);
 
-      res.status(200).json({ message: "OTP sent !!" });
+      const OTP = this.GenerateAndSendOTP(userData.email);
+      const userId = currentUser._id.toString();
+      holdedUsers.set(userId, { otp: OTP.toString(), user: data.data });
+
+      res.status(200).json({ message: "OTP sent !!", userId: userData.id });
       return;
     } catch (error: any) {
       res.status(505).json({ error: `Internal server error ${error.message}` });
@@ -145,14 +152,14 @@ class UserServices {
     `,
       })
       .then(() => console.log("OTP SENT"))
-      .catch((err) => {
+      .catch((err: any) => {
         console.log(err);
       });
 
-    return;
+    return OTP;
   };
 
-  ValidateOTP = (req: Request, res: Response) => {};
+  ValidateOTP = (req: Request, res: Response) => { };
 }
 
 export const userServices = new UserServices();

@@ -6,7 +6,6 @@ nav {
   font-weight: bolder;
   height: 50px;
   display: flex;
-  background: rgb(0, 153, 255);
   align-items: center;
   justify-content: space-between;
 }
@@ -15,7 +14,7 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #395cbb;
+  background-color: rgba(0, 0, 0, 0.313);
   font-size: 1.2rem;
   min-width: 100px;
   height: 50px;

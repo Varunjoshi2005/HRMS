@@ -41,3 +41,8 @@ npx prisma init
 
 npx prisma generate
 npx prisma db push
+
+
+
+
+background-image: url(&quot;https://cdn.keka.com/shared/assets/images/background/bg-banner-purple.jpg&quot;)

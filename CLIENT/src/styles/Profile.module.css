@@ -4,37 +4,57 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   object-fit: cover;
   background-color: rgb(255, 77, 0);
+  font-weight: bold;
+  color: white;
 }
 
 .dropDownProfileBox {
   position: absolute;
-  height: 200px;
-  width: 200px;
+  top: 33px; 
   left: -180px;
-  top: 30px;
+  width: 200px;
   background: #fff;
-  box-shadow: 2px 2px 10px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(-20px);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+  z-index: 100;
+}
+
+.dropDownProfileBox.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .dropDownProfileBox div {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
   padding: 10px;
   font-weight: lighter;
-  font-size: 12px;
-  border-bottom: 1px solid #ccc;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
   color: black;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-.dropDownProfileBox div:hover {
+.dropDownProfileBox .eachOptions:hover {
   background-color: #f0f0f0;
 }
 
+.eachColor {
+   transition: transform 0.3s;
+}
 
+.eachColor:hover {
+   transform: scale(1.1);
+}

@@ -1,10 +1,13 @@
 import Profile from "@/modules/Profile";
 import styles from "../styles/Navbar.module.css";
 import { Bell, Search } from "lucide-react";
+import { useGlobalContext } from "@/context/GlobalContext";
 
 function Navbar() {
+
+  const {selectedBgColor} = useGlobalContext();
   return (
-    <nav data-navbar>
+    <nav data-navbar style={{ background : selectedBgColor  }}>
       <div
         style={{
           display: "flex",
@@ -13,7 +16,7 @@ function Navbar() {
           width: "80%",
         }}
       >
-        <span className={styles.logo}>Hire-Link</span>
+        <span className={styles.logo} >Hire-Link</span>
 
         <span style={{ fontSize: "14px" }}>Ariel Software Solutions</span>
 

@@ -95,7 +95,7 @@ const ProfileOptions = [
   { name: "Logout", link: "/logout", icon: Power },
 ];
 
-const colors = ["red", "green", "blue", "purple", "orange"];
+const colors = ["#5746AF", "#2986CE", "#B64F79", "#86C06A", "#E1983D"];
 
 const profileItem = [
   { name: "ABOUT", link: "/about" },

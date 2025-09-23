@@ -18,9 +18,15 @@ const PostSchema = new mongoose.Schema(
       default: 0,
     },
 
-    postUrl: {
-      type: String,
-      required: true,
+    postContent: {
+      url: {
+        type: String,
+        required: true,
+      },
+      contentType: {
+        type: String,
+        required: true,
+      },
     },
   },
   { timestamps: true }

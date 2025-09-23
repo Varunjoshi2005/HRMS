@@ -15,7 +15,7 @@ const startServer = async () => {
     const app = express();
     const server = http.createServer(app);
 
-     mongoose
+    mongoose
       .connect(Config.mongodbUrl)
       .then(() => console.log("mongodb connnected!!"))
       .catch((err) => console.error(err));
@@ -32,7 +32,7 @@ const startServer = async () => {
 
     app.use("/account", UserRoute);
     app.use("/post", PostRoute);
-    app.use("/api" ,  OtherRoute);
+    app.use("/api", OtherRoute);
 
     server.listen(Config.port, () => {
       console.log(`Server running on port : ${Config.port}!!`);

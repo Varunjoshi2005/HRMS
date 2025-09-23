@@ -6,6 +6,7 @@ import { Config } from "../config";
 import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 import { dummyUser, userdata } from "./data";
+import { uploadPath } from "../path";
 
 const AutoCreateUser = async () => {
   await mongoose.connect(Config.mongodbUrl);
@@ -16,6 +17,12 @@ const AutoCreateUser = async () => {
 
   userModel.username = userdata.username;
   userModel.email = userdata.email;
+  if (userModel.profileContent) {
+    userModel.profileContent.url = `${uploadPath}/${
+      Date.now() + userdata.imageName
+    }`;
+    userModel.profileContent.contentType = userdata.contentType;
+  }
   const hashPassword = await bcrypt.hash(userdata.password, 10);
   userModel.password = hashPassword;
 
@@ -39,6 +46,9 @@ const AutoAddEmployee = async () => {
   const prisma = new PrismaClient();
 
   console.log("this is the data ", dummyUser);
+
+  const hashPassword = await bcrypt.hash(dummyUser.password, 10);
+  dummyUser.password = hashPassword;
 
   const user = await prisma.user.create({
     data: dummyUser,
@@ -67,4 +77,4 @@ const AutoAddEmployee = async () => {
 
 // AutoAddEmployee();
 
-AutoCreateUser();
+// AutoCreateUser();

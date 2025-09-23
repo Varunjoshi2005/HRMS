@@ -15,17 +15,19 @@ model User {
   name             String
   password         String
   profileUrl       String?
+  designation      String
   phoneNumber      String
   role             String           @default("USER")
   businessUnit     String
   department       String
-  reportManager    String
+  reportManager    String?
   personalDetails  PrimaryDetails?
   contactDetails   ContactDetails?
   addressDetails   AddressDetails?
   indentityDetails IdentityDetails?
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
+  Comment          Comment?
 }
 
 model PrimaryDetails {
@@ -82,15 +84,17 @@ model IdentityDetails {
 }
 
 model AddharDetails {
-  id           String          @id @default(uuid())
-  identity     IdentityDetails @relation(fields: [identityId], references: [id])
-  identityId   String          @unique
-  name         String
-  addharNumber String          @unique
-  gender       String
-  dob          String
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
+  id               String          @id @default(uuid())
+  identity         IdentityDetails @relation(fields: [identityId], references: [id])
+  identityId       String          @unique
+  name             String
+  enrollmentNumber String
+  address          String
+  addharNumber     String          @unique
+  gender           String
+  dob              String
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 }
 
 model PanCardDetails {
@@ -103,4 +107,14 @@ model PanCardDetails {
   dob           String
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  comment   String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @unique
+  postId    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

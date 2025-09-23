@@ -6,7 +6,7 @@ interface AuthRequest extends Request {
 }
 
 interface TokenUser {
-  id: mongoose.Types.ObjectId;
+  id: string;
   username: string;
   email: string;
   role: string;
@@ -17,13 +17,14 @@ interface UserDetails {
   cardId: string;
   workLocation: string;
   name: string;
+  designation: string;
   password: string;
   profileUrl?: string;
   phoneNumber: string;
   role: string;
   businessUnit: string;
   department: string;
-  reportManager: string;
+  reportManager?: string;
 }
 
 interface PersonalDetailsProps {
@@ -70,6 +71,8 @@ interface IdentityDetails {
 interface AddharDetails {
   create: {
     name: string;
+    address: string;
+    enrollmentNumber: string;
     addharNumber: string;
     gender: string;
     dob: string;
@@ -84,9 +87,6 @@ interface PanCardDetails {
     dob: string;
   };
 }
-
-
-
 
 export {
   AuthRequest,

@@ -3,13 +3,13 @@ import PostModel from "../models/postDoc";
 import fs from "fs/promises";
 import { uploadPath } from "../path";
 import UserModel from "../models/userDoc";
+import { PrismaClient } from "@prisma/client";
 
 class PostServices {
   uploadPost = async (req: Request, res: Response) => {
     try {
       const { userId, caption } = req.body;
       const postFile = req.file;
-      console.log("this is the body data", req.body.userId, req.file);
 
       if (!userId || !postFile) {
         res
@@ -19,9 +19,15 @@ class PostServices {
       }
       const newPost = new PostModel();
 
-      const checkUser = await UserModel.findById(userId);
-      if (!checkUser) {
-        res.status(404).json({ error: "user doesn't exsists!!" });
+      const checkUser = await UserModel.findById(userId).populate("roleId");
+
+      const result: any = checkUser;
+      if (
+        !checkUser ||
+        !checkUser.roleId ||
+        result.roleId.roleName != "ADMIN"
+      ) {
+        res.status(404).json({ error: "Not allowed to post!!" });
         return;
       }
       newPost.userId = userId;
@@ -33,7 +39,10 @@ class PostServices {
           res.status(404).json({ error: "error uploading post !!" });
           return;
         }
-        newPost.postUrl = status.url;
+        if (newPost.postContent) {
+          newPost.postContent.url = status.url;
+          newPost.postContent.contentType = postFile.mimetype;
+        }
       }
 
       const savedPost = await newPost.save();
@@ -43,6 +52,34 @@ class PostServices {
       }
 
       res.status(202).json({ message: "post uploaded sucessfully!!" });
+      return;
+    } catch (error: any) {
+      res
+        .status(505)
+        .json({ error: "Internal server error : Failed to post!!" });
+      console.log(error.message);
+      return;
+    }
+  };
+
+  AddNewComment = async (req: Request, res: Response) => {
+    try {
+      const { comment, userId, postId } = req.body;
+      const prisma = new PrismaClient();
+      if (!comment || !userId || !postId) {
+        res.status(404).json({ error: "comment or userId Missing !!" });
+        return;
+      }
+
+      await prisma.comment.create({
+        data: {
+          comment: comment,
+          userId: userId,
+          postId: postId,
+        },
+      });
+
+      res.status(200).json({ message: "comment added!!" });
       return;
     } catch (error: any) {
       res
@@ -63,6 +100,29 @@ class PostServices {
       };
     } catch (error) {
       return false;
+    }
+  };
+
+  GetPosts = async (req: Request, res: Response) => {
+    try {
+      console.log("getting rqeuest");
+      const posts = await PostModel.find({}).populate(
+        "userId",
+        "username imageUrl"
+      );
+      console.log(posts);
+      if (!posts) {
+        res.status(404).json({ message: "No posts available!" });
+        return;
+      }
+      res.status(202).json({ posts: posts });
+      return;
+    } catch (error: any) {
+      res
+        .status(505)
+        .json({ error: "Internal server error : Failed to post!!" });
+      console.log(error.message);
+      return;
     }
   };
 }

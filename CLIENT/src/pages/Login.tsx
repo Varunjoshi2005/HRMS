@@ -8,7 +8,7 @@ import OtpPopup from "@/Comp/OtpModel";
 
 const UserSignInSchema = z.object({
   email: z.string().email(""),
-  password: z.string().min(1),
+  passcode: z.string().min(1),
 });
 
 type UserSignIn = z.infer<typeof UserSignInSchema>;
@@ -16,7 +16,6 @@ type UserSignIn = z.infer<typeof UserSignInSchema>;
 const Login: React.FC = () => {
   const [otpModelEnable, setOtpModelEnable] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
-
 
   const {
     register,
@@ -49,8 +48,6 @@ const Login: React.FC = () => {
     }
   };
 
-  
-
   return (
     <>
       {otpModelEnable && userId && <OtpPopup userId={userId} />}
@@ -79,13 +76,13 @@ const Login: React.FC = () => {
               <label htmlFor="password">Password</label>
               <input
                 type="password"
-                id="password"
-                {...register("password")}
+                id="passcode"
+                {...register("passcode")}
                 placeholder="Enter your password"
                 required
               />
-              {errors.password && (
-                <span style={{ color: "red" }}>{errors.password.message}</span>
+              {errors.passcode && (
+                <span style={{ color: "red" }}>{errors.passcode.message}</span>
               )}
             </div>
 
@@ -106,7 +103,6 @@ const Login: React.FC = () => {
           </div>
         </div>
       </div>
-
     </>
   );
 };

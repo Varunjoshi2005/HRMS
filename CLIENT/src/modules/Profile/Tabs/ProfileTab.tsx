@@ -1,7 +1,15 @@
+import { useUserContext } from "@/context/UserContext";
 import styles from "./tab.module.css";
 import indiaLogo from "@/assets/india.png";
 
 function ProfileTab() {
+  const { user } = useUserContext();
+
+  const { personalDetails, contactDetails, addressDetails, indentityDetails } =
+    user;
+
+  const { addharDetails, panDetails } = indentityDetails;
+
   return (
     <div className={styles.profileInfoContainer}>
       <div className={styles.primaryAndContact}>
@@ -39,12 +47,18 @@ function ProfileTab() {
                 <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                   FIRST NAME
                 </span>
-                <span style={{ fontSize: "12px" }}>varun joshi</span>
+                <span style={{ fontSize: "12px" }}>
+                  {personalDetails.firstName}
+                </span>
               </span>
 
               <span id={styles.innerInfo}>
                 <span style={{ fontWeight: "bolder" }}>MIDDLE NAME</span>
-                <span style={{ fontSize: "12px" }}>-not-set-</span>
+                <span style={{ fontSize: "12px" }}>
+                  {personalDetails.middleName
+                    ? personalDetails.middleName
+                    : "-not-set-"}
+                </span>
               </span>
             </div>
             <div className={styles.innerDetails}>
@@ -52,12 +66,16 @@ function ProfileTab() {
                 <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                   LAST NAME
                 </span>
-                <span style={{ fontSize: "12px" }}>Joshi</span>
+                <span style={{ fontSize: "12px" }}>
+                  {personalDetails.lastName}
+                </span>
               </span>
 
               <span id={styles.innerInfo}>
                 <span style={{ fontWeight: "bolder" }}>DISPLAY NAME</span>
-                <span style={{ fontSize: "12px" }}>Varun Joshi</span>
+                <span style={{ fontSize: "12px" }}>
+                  {personalDetails.displayName}
+                </span>
               </span>
             </div>
             <div className={styles.innerDetails}>
@@ -65,12 +83,14 @@ function ProfileTab() {
                 <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                   GENDER
                 </span>
-                <span style={{ fontSize: "12px" }}>Male</span>
+                <span style={{ fontSize: "12px" }}>
+                  {personalDetails.gender}
+                </span>
               </span>
 
               <span id={styles.innerInfo}>
                 <span style={{ fontWeight: "bolder" }}>DATE OF BIRTH</span>
-                <span style={{ fontSize: "12px" }}>19-02-2005</span>
+                <span style={{ fontSize: "12px" }}>{personalDetails.dob}</span>
               </span>
             </div>
             <div className={styles.innerDetails}>
@@ -78,12 +98,16 @@ function ProfileTab() {
                 <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                   MARITAL STATUS
                 </span>
-                <span style={{ fontSize: "12px" }}>Unmarried</span>
+                <span style={{ fontSize: "12px" }}>
+                  {personalDetails.maritalStatus ? "MARRIED" : "UNMARRIED"}
+                </span>
               </span>
 
               <span id={styles.innerInfo}>
                 <span style={{ fontWeight: "bolder" }}>BLOOD GROUP</span>
-                <span style={{ fontSize: "12px" }}>B+ (B positive)</span>
+                <span style={{ fontSize: "12px" }}>
+                  {personalDetails.bloodGroup}
+                </span>
               </span>
             </div>
 
@@ -92,7 +116,9 @@ function ProfileTab() {
                 <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                   PHYSICALLY HANDICAPPED
                 </span>
-                <span style={{ fontSize: "12px" }}>No</span>
+                <span style={{ fontSize: "12px" }}>
+                  {personalDetails.physicallyHandicap ? "yes" : "no"}
+                </span>
               </span>
             </div>
             <div className={styles.innerDetails}>
@@ -100,7 +126,9 @@ function ProfileTab() {
                 <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                   NATIONALITY
                 </span>
-                <span style={{ fontSize: "12px" }}>Indian</span>
+                <span style={{ fontSize: "12px" }}>
+                  {personalDetails.nationality}
+                </span>
               </span>
             </div>
           </div>
@@ -141,14 +169,14 @@ function ProfileTab() {
                   WORK EMAIL
                 </span>
                 <span style={{ fontSize: "12px" }}>
-                  varun@areilsolution.net
+                  {contactDetails.workEmail}
                 </span>
               </span>
 
               <span id={styles.innerInfo}>
                 <span style={{ fontWeight: "bolder" }}>PERSONAL EMAIL</span>
                 <span style={{ fontSize: "12px" }}>
-                  varunjoshi1590@gmail.com
+                  {contactDetails.personalEmail}
                 </span>
               </span>
             </div>
@@ -157,12 +185,18 @@ function ProfileTab() {
                 <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                   MOBILE NUMBER
                 </span>
-                <span style={{ fontSize: "12px" }}>Joshi</span>
+                <span style={{ fontSize: "12px" }}>
+                  {contactDetails.mobileNumber}
+                </span>
               </span>
 
               <span id={styles.innerInfo}>
                 <span style={{ fontWeight: "bolder" }}>WORK NUMBER</span>
-                <span style={{ fontSize: "12px" }}>-not-set-</span>
+                <span style={{ fontSize: "12px" }}>
+                  {contactDetails.workNumber
+                    ? contactDetails.workNumber
+                    : "-not-set-"}
+                </span>
               </span>
             </div>
             <div className={styles.innerDetails}>
@@ -170,7 +204,11 @@ function ProfileTab() {
                 <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                   RESIDENCE NUMBER
                 </span>
-                <span style={{ fontSize: "12px" }}>-not-set-</span>
+                <span style={{ fontSize: "12px" }}>
+                  {contactDetails.residenceNumber
+                    ? contactDetails.residenceNumber
+                    : "-not-set-"}
+                </span>
               </span>
             </div>
           </div>
@@ -213,13 +251,15 @@ function ProfileTab() {
                   PERMENENT ADDRESS
                 </span>
                 <span style={{ fontSize: "12px" }}>
-                  #1231 xyz street 45 chandigarh
+                  {addressDetails.address}
                 </span>
               </span>
 
               <span id={styles.innerInfo}>
                 <span style={{ fontWeight: "bolder" }}>COUNTRY</span>
-                <span style={{ fontSize: "12px" }}>India</span>
+                <span style={{ fontSize: "12px" }}>
+                  {addressDetails.country}
+                </span>
               </span>
             </div>
             <div className={styles.innerDetails}>
@@ -227,12 +267,14 @@ function ProfileTab() {
                 <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                   CITY
                 </span>
-                <span style={{ fontSize: "12px" }}>Chandigarh</span>
+                <span style={{ fontSize: "12px" }}>{addressDetails.city}</span>
               </span>
 
               <span id={styles.innerInfo}>
                 <span style={{ fontWeight: "bolder" }}>PIN CODE</span>
-                <span style={{ fontSize: "12px" }}>160101</span>
+                <span style={{ fontSize: "12px" }}>
+                  {addressDetails.zipCode}
+                </span>
               </span>
             </div>
             <div className={styles.innerDetails}>
@@ -240,7 +282,7 @@ function ProfileTab() {
                 <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                   STATE
                 </span>
-                <span style={{ fontSize: "12px" }}>chandigarh</span>
+                <span style={{ fontSize: "12px" }}>{addressDetails.state}</span>
               </span>
             </div>
           </div>
@@ -334,14 +376,20 @@ function ProfileTab() {
                   <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                     AADHAAR-NUMBER
                   </span>
-                  <span style={{ fontSize: "12px" }}>4511-1456-1313</span>
+                  <span style={{ fontSize: "12px" }}>
+                    {addharDetails.addharNumber}
+                  </span>
                 </span>
 
                 <span id={styles.innerInfo}>
                   <span style={{ fontWeight: "bolder" }}>
                     ENROLLMENT NUMBER
                   </span>
-                  <span style={{ fontSize: "12px" }}>Not available</span>
+                  <span style={{ fontSize: "12px" }}>
+                    {addharDetails.enrollmentNumber
+                      ? addharDetails.enrollmentNumber
+                      : "Not available"}
+                  </span>
                 </span>
               </div>
               <div className={styles.innerDetails}>
@@ -349,12 +397,12 @@ function ProfileTab() {
                   <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                     NAME
                   </span>
-                  <span style={{ fontSize: "12px" }}>Varun Joshi</span>
+                  <span style={{ fontSize: "12px" }}>{addharDetails.name}</span>
                 </span>
 
                 <span id={styles.innerInfo}>
                   <span style={{ fontWeight: "bolder" }}>DATE OF BIRTH</span>
-                  <span style={{ fontSize: "12px" }}>19-02-2005</span>
+                  <span style={{ fontSize: "12px" }}>{addharDetails.dob}</span>
                 </span>
               </div>
               <div className={styles.innerDetails}>
@@ -362,7 +410,11 @@ function ProfileTab() {
                   <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                     ADDRESS
                   </span>
-                  <span style={{ fontSize: "12px" }}>Chandigarh</span>
+                  <span style={{ fontSize: "12px" }}>
+                    {addharDetails.address
+                      ? addharDetails.address
+                      : "not Available"}
+                  </span>
                 </span>
               </div>
             </div>
@@ -387,12 +439,14 @@ function ProfileTab() {
                   <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                     PERMENENT ACCOUNT NUMBER
                   </span>
-                  <span style={{ fontSize: "12px" }}>4511-1456-1313</span>
+                  <span style={{ fontSize: "12px" }}>
+                    {panDetails.panNumber}
+                  </span>
                 </span>
 
                 <span id={styles.innerInfo}>
                   <span style={{ fontWeight: "bolder" }}>DATE-OF-BIRTH</span>
-                  <span style={{ fontSize: "12px" }}>19-02-2005</span>
+                  <span style={{ fontSize: "12px" }}>{panDetails.dob}</span>
                 </span>
               </div>
               <div className={styles.innerDetails}>
@@ -400,12 +454,16 @@ function ProfileTab() {
                   <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                     NAME
                   </span>
-                  <span style={{ fontSize: "12px" }}>Varun Joshi</span>
+                  <span style={{ fontSize: "12px" }}>
+                    {panDetails.applicantName}
+                  </span>
                 </span>
 
                 <span id={styles.innerInfo}>
                   <span style={{ fontWeight: "bolder" }}>FATHER'S NAME</span>
-                  <span style={{ fontSize: "12px" }}>Kamal Joshi</span>
+                  <span style={{ fontSize: "12px" }}>
+                    {panDetails.fatherName}
+                  </span>
                 </span>
               </div>
             </div>
@@ -437,12 +495,18 @@ function ProfileTab() {
                 <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                   AADHAAR-NUMBER
                 </span>
-                <span style={{ fontSize: "12px" }}>4511-1456-1313</span>
+                <span style={{ fontSize: "12px" }}>
+                  {addharDetails.addharNumber}
+                </span>
               </span>
 
               <span id={styles.innerInfo}>
                 <span style={{ fontWeight: "bolder" }}>ENROLLMENT NUMBER</span>
-                <span style={{ fontSize: "12px" }}>Not Avaliable</span>
+                <span style={{ fontSize: "12px" }}>
+                  {addharDetails.enrollmentNumber
+                    ? addharDetails.enrollmentNumber
+                    : "Not available"}
+                </span>
               </span>
             </div>
             <div className={styles.innerDetails}>
@@ -450,12 +514,12 @@ function ProfileTab() {
                 <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                   NAME
                 </span>
-                <span style={{ fontSize: "12px" }}>Varun Joshi</span>
+                <span style={{ fontSize: "12px" }}>{addharDetails.name}</span>
               </span>
 
               <span id={styles.innerInfo}>
                 <span style={{ fontWeight: "bolder" }}>DATE OF BIRTH</span>
-                <span style={{ fontSize: "12px" }}>19-02-2005</span>
+                <span style={{ fontSize: "12px" }}>{addharDetails.dob}</span>
               </span>
             </div>
             <div className={styles.innerDetails}>
@@ -463,14 +527,18 @@ function ProfileTab() {
                 <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                   ADDRESS
                 </span>
-                <span style={{ fontSize: "12px" }}>Chandigarh</span>
+                <span style={{ fontSize: "12px" }}>
+                  {addharDetails.address
+                    ? addharDetails.address
+                    : "Not available"}
+                </span>
               </span>
 
               <span id={styles.innerInfo}>
                 <span style={{ fontWeight: "bolder", fontSize: "15px" }}>
                   GENDER
                 </span>
-                <span style={{ fontSize: "12px" }}>Not Avaliable</span>
+                <span style={{ fontSize: "12px" }}>{addharDetails.gender}</span>
               </span>
             </div>
           </div>

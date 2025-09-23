@@ -63,7 +63,10 @@ function Dashboard() {
         </div>
 
         <div className={styles.eachContainer}>
-          <div style={{ gap: "10px", fontSize: "12px" }} className={styles.centerContainerLayout}>
+          <div
+            style={{ gap: "10px", fontSize: "12px" }}
+            className={styles.centerContainerLayout}
+          >
             <span>ORGANIZATION : </span>
             <span>Ariel software solutions</span>
           </div>
@@ -100,31 +103,30 @@ function Dashboard() {
             <Birthdays />
           </div>
 
-
           <div className={styles.feedContainer}>
-
-            <div className={`${styles.centerContainerLayout} ${styles.surveyCard}`}>
+            <div
+              className={`${styles.centerContainerLayout} ${styles.surveyCard}`}
+            >
               <h4>This week's Pulse Survey is ready!</h4>
-              <p>Share your valuable feedback to make your workplace even better.</p>
+              <p>
+                Share your valuable feedback to make your workplace even better.
+              </p>
               <button className={styles.startPulse}>🚀 Start Pulse</button>
             </div>
 
-            <div className={`${styles.centerContainerLayout} ${styles.surveyCard}`}>
+            <div
+              className={`${styles.centerContainerLayout} ${styles.surveyCard}`}
+            >
               <h4>Ritababaygfjug</h4>
-              <p>Share your valuable feedback to make your workplace even better.</p>
+              <p>
+                Share your valuable feedback to make your workplace even better.
+              </p>
               <small>DEADLINE: 31 Aug 2025</small>
               <button className={`${styles.takeSurvey}`}>Take Survey</button>
             </div>
           </div>
 
-          {
-            [1, 2, 3, 4, 5].map((item) => (
-              <Posts key={item} />
-            ))
-          }
-
-
-
+          <Posts />
         </div>
       </main>
     </div>

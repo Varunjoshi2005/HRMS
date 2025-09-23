@@ -4,10 +4,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "@/context/UserContext";
 import { ACTIONS } from "@/types";
+import { ApiEndPoints } from "@/API";
 
 function Profile() {
   const [toogleBoxVisisble, setToogleBoxVisible] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { user } = useUserContext();
+
   const { dispatch } = useUserContext();
   return (
     <>
@@ -15,27 +18,34 @@ function Profile() {
         onClick={() => setToogleBoxVisible((prev) => !prev)}
         className={styles.ProfileIcon}
       >
-        <span style={{ userSelect: "none" }}>V</span>
+        {user.profileUrl ? (
+          <img
+            src={`${ApiEndPoints.renderEmployeeProfile}/${user.id}`}
+            alt=""
+            width={50}
+            style={{ objectFit: "contain", borderRadius: "50%" }}
+          />
+        ) : (
+          <span>{user.name.charAt(0)}</span>
+        )}
         {toogleBoxVisisble && (
           <div className={styles.dropDownProfileBox}>
             {ProfileOptions.map((each) => {
               const Icon = each.icon;
               return (
-                <div>
+                <div
+                  onClick={() => {
+                    if (each.link == "/logout") {
+                      dispatch({ type: ACTIONS.REMOVE_USER });
+                      localStorage.removeItem("user-details");
+                      navigate("/login");
+                      return;
+                    }
+                    navigate(each.link);
+                  }}
+                >
                   <Icon color="gray" size={18} />
-                  <span
-                    onClick={() => {
-                      if (each.link == "/logout") {
-                        dispatch({ type: ACTIONS.REMOVE_USER });
-                        localStorage.removeItem("user-details");
-                        navigate("/login");
-                        return;
-                      }
-                      navigate(each.link);
-                    }}
-                  >
-                    {each.name}
-                  </span>
+                  <span>{each.name}</span>
                 </div>
               );
             })}

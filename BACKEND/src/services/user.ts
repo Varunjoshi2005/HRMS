@@ -5,14 +5,11 @@ import bcrypt from "bcryptjs";
 import { TokenUser } from "../types";
 import RoleModel from "../models/roleDoc";
 import UserRoleModel from "../models/userRoleDoc";
-import { generateOTP,  transporter } from "../utils";
+import { generateOTP, transporter } from "../utils";
 import { holdedUsers } from "../global";
-
-
-
+import { PrismaClient } from "@prisma/client";
 
 class UserServices {
-
   UserRegister = async (req: Request, res: Response) => {
     try {
       const { username, email, password } = req.body;
@@ -52,6 +49,66 @@ class UserServices {
     }
   };
 
+  EmployeeLogin = async (req: Request, res: Response) => {
+    try {
+      const { email, passcode } = req.body;
+      if (!email || !passcode) {
+        res.status(404).json({ error: "credentails missing !!" });
+        return;
+      }
+      const prisma = new PrismaClient();
+
+      const currentUser = await prisma.user.findUnique({
+        where: {
+          email: email,
+        },
+        include: {
+          personalDetails: true,
+          addressDetails: true,
+          contactDetails: true,
+          indentityDetails: {
+            include: {
+              addharDetails: true,
+              panDetails: true,
+            },
+          },
+        },
+      });
+
+      if (!currentUser) {
+        res
+          .status(404)
+          .json({ error: "User with this email doesn't exists!!" });
+        return;
+      }
+
+      const { password, createdAt, updatedAt, ...employeeData }: any =
+        currentUser;
+
+      const verifyPassword = await bcrypt.compare(passcode, password);
+      if (!verifyPassword) {
+        res.status(404).json({ error: "Invalid Passcode !!" });
+        return;
+      }
+
+      const data = auth.GenerateToken(employeeData);
+      if (!data.success) {
+        res.status(505).json({ error: "failed to login !!" });
+        return;
+      }
+
+      const OTP = this.GenerateAndSendOTP(employeeData.email);
+      const userId = currentUser.id.toString();
+      holdedUsers.set(userId, { otp: OTP.toString(), user: data.data });
+
+      res.status(200).json({ message: "OTP sent !!", userId: employeeData.id });
+      return;
+    } catch (error: any) {
+      res.status(505).json({ error: `Internal server error ${error.message}` });
+      return;
+    }
+  };
+
   UserLogin = async (req: Request, res: Response) => {
     try {
       const { email, password } = req.body;
@@ -83,7 +140,7 @@ class UserServices {
       }
 
       const userData: TokenUser = {
-        id: currentUser._id,
+        id: currentUser._id.toString(),
         username: currentUser.username,
         email: currentUser.email,
         role: user.roleId.roleName,
@@ -94,8 +151,6 @@ class UserServices {
         res.status(505).json({ error: "failed to login !!" });
         return;
       }
-
-
 
       const OTP = this.GenerateAndSendOTP(userData.email);
       const userId = currentUser._id.toString();
@@ -159,7 +214,7 @@ class UserServices {
     return OTP;
   };
 
-  ValidateOTP = (req: Request, res: Response) => { };
+  ValidateOTP = (req: Request, res: Response) => {};
 }
 
 export const userServices = new UserServices();

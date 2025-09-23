@@ -21,7 +21,16 @@ const UserSchema = new mongoose.Schema(
       ref: "Role",
     },
 
-    imageUrl: String,
+    profileContent: {
+      url: {
+        type: String,
+        required: true,
+      },
+      contentType: {
+        type: String,
+        required: true,
+      },
+    },
   },
   { timestamps: true }
 );

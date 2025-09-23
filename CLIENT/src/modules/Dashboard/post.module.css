@@ -1,50 +1,117 @@
 .postContainer {
-    padding: 0px;
-    height: auto;
+  padding: 0px;
+  height: auto;
 }
 
 .SinglePostContainer {
-    height: 500px;
-    width: 100%;
-    background: #fff;
+  min-height: 500px;
+  max-width: 700px;
+  width: 100%;
+  background: #fff;
 }
 
-
-
 .topBarItems {
-    display: flex;
-    width: 100%;
-    height: 50px;
-    margin-bottom: 5px;
-    justify-content: space-between;
-    padding: 10px;
+  display: flex;
+  width: 100%;
+  height: 50px;
+  margin-bottom: 5px;
+  justify-content: space-between;
+  padding: 10px;
 }
 
 .postInfo {
-    height: inherit;
-    display: flex;
-    gap: 20px;
+  height: 60%;
+  display: flex;
+  gap: 20px;
 }
 
 .userPost {
-    width: 100%;
-    height: 82%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
 
 .postActions {
-    width: 100%;
-    font-size: 12px;
-    display: flex;
-    justify-content: space-between;
-    border-top: 1px solid #ccc;
+  width: 100%;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #ccc;
 }
 
+.CommentBox {
+  max-height: 300px;
+  min-height: 60px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
 
-hr { 
-    color : rgb(0, 149, 255)
+.addComment {
+  width: 100%;
+  display: flex;
+  padding: 6px;
+  justify-content: space-between;
+}
+
+.addComment input {
+  border: 1px solid rgba(182, 182, 182, 0.568);
+  outline: none;
+  padding: 5px;
+  width: 90%;
+}
+
+.listAllComments {
+  max-height: 200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid rgba(182, 182, 182, 0.568);
+  border-bottom: 1px solid rgba(182, 182, 182, 0.568);
+  min-height: 80px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.listAllComments::-webkit-scrollbar-button {
+  display: none;
+}
+
+.listAllComments::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.listAllComments::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 0px;
+}
+
+.listAllComments::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 0px;
+}
+
+.listAllComments::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.eachComment {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 5px;
+  gap: 10px;
+}
+
+.eachComment .commentDetails {
+  display: flex;
+  justify-content: center;
+}
+
+hr {
+  color: rgb(0, 149, 255);
 }

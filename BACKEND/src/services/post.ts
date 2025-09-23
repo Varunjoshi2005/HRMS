@@ -1,64 +1,66 @@
 import type { Request, Response } from "express";
-import PostModel from "../models/postDoc";
 import fs from "fs/promises";
 import { uploadPath } from "../path";
-import UserModel from "../models/userDoc";
 import { PrismaClient } from "@prisma/client";
 
 class PostServices {
+
   uploadPost = async (req: Request, res: Response) => {
+    const prisma = new PrismaClient();
     try {
       const { userId, caption } = req.body;
       const postFile = req.file;
 
       if (!userId || !postFile) {
-        res
-          .status(404)
-          .json({ message: "failed to post something missing !!" });
+        res.status(400).json({ message: "Missing userId or file." });
         return;
       }
-      const newPost = new PostModel();
 
-      const checkUser = await UserModel.findById(userId).populate("roleId");
-
-      const result: any = checkUser;
-      if (
-        !checkUser ||
-        !checkUser.roleId ||
-        result.roleId.roleName != "ADMIN"
-      ) {
-        res.status(404).json({ error: "Not allowed to post!!" });
-        return;
-      }
-      newPost.userId = userId;
-      if (caption) newPost.caption = caption;
-
-      if (postFile) {
-        const status = await this.savePostInDisk(postFile);
-        if (!status) {
-          res.status(404).json({ error: "error uploading post !!" });
-          return;
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        include: {
+          userRoles: { include: { role: true } }
         }
-        if (newPost.postContent) {
-          newPost.postContent.url = status.url;
-          newPost.postContent.contentType = postFile.mimetype;
-        }
-      }
+      });
 
-      const savedPost = await newPost.save();
-      if (!savedPost) {
-        res.status(404).json({ error: "failed to save image!!" });
+      if (!user || !user.userRoles.some(ur => ur.role.roleName === "ADMIN")) {
+        res.status(403).json({ error: "Not allowed to post!" });
         return;
       }
 
-      res.status(202).json({ message: "post uploaded sucessfully!!" });
+      const status = await this.savePostInDisk(postFile);
+      if (!status) {
+        res.status(500).json({ error: "Error uploading post!" });
+        return;
+      }
+
+      const post = await prisma.post.create({
+        data: {
+          userId,
+          caption,
+          postContent: {
+            create: {
+              buffer: postFile.buffer,
+              contentType: postFile.mimetype
+            }
+          }
+        },
+        include: { postContent: true }
+      });
+
+      if (!post) {
+        res.status(500).json({ error: "Failed to save post!" });
+        return;
+      }
+
+      res.status(201).json({ message: "Post uploaded successfully!", post });
       return;
     } catch (error: any) {
-      res
-        .status(505)
-        .json({ error: "Internal server error : Failed to post!!" });
+      res.status(500).json({ error: "Internal server error: Failed to post!" });
       console.log(error.message);
       return;
+    } finally {
+      await prisma.$disconnect();
     }
   };
 
@@ -66,6 +68,7 @@ class PostServices {
     try {
       const { comment, userId, postId } = req.body;
       const prisma = new PrismaClient();
+
       if (!comment || !userId || !postId) {
         res.status(404).json({ error: "comment or userId Missing !!" });
         return;
@@ -104,25 +107,33 @@ class PostServices {
   };
 
   GetPosts = async (req: Request, res: Response) => {
+    const prisma = new PrismaClient();
     try {
-      console.log("getting rqeuest");
-      const posts = await PostModel.find({}).populate(
-        "userId",
-        "username imageUrl"
-      );
+      console.log("getting request");
+      const posts = await prisma.post.findMany({
+        include: {
+          user: {
+            select: {
+              username: true,
+              email: true
+            }
+          },
+          postContent: true
+        }
+      });
       console.log(posts);
-      if (!posts) {
+      if (!posts || posts.length === 0) {
         res.status(404).json({ message: "No posts available!" });
         return;
       }
-      res.status(202).json({ posts: posts });
+      res.status(200).json({ posts });
       return;
     } catch (error: any) {
-      res
-        .status(505)
-        .json({ error: "Internal server error : Failed to post!!" });
+      res.status(500).json({ error: "Internal server error: Failed to get posts!" });
       console.log(error.message);
       return;
+    } finally {
+      await prisma.$disconnect();
     }
   };
 }

@@ -2,7 +2,6 @@ import dashStyles from "@/styles/dashboard.module.css";
 import styles from "./post.module.css";
 import { MessageSquare, MoreVertical, ThumbsUp } from "lucide-react";
 import profilePic from "@/assets/userLogo.jpg";
-import dummyPost from "@/assets/post.png";
 import { useEffect, useState } from "react";
 import CommentBox from "./CommentBox";
 import { FetchPosts } from "@/services";

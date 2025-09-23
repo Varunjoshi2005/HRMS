@@ -11,15 +11,24 @@ function Profile() {
   const { user } = useUserContext();
   const [currentTab, setTab] = useState<TabType>({ type: "about" });
 
+
   return (
     <div className={styles.profileContainer}>
       <div className={styles.coverSection}>
         <div className={styles.avatarContainer}>
-          <img
-            src={`${ApiEndPoints.renderEmployeeProfile}/${user.id}` || userLogo}
-            alt="User"
-            className={styles.avatar}
-          />
+         
+            <img
+              src={`${ApiEndPoints.renderEmployeeProfile}/${user.id}` || userLogo}
+              alt="User"
+              className={styles.avatar}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = userLogo;
+              }}
+            />
+
+
+
         </div>
         <div className={styles.userInfo}>
           <h2 className={styles.userName}>{user.name}</h2>

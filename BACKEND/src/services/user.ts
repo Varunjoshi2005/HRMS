@@ -1,68 +1,28 @@
 import type { Response, Request } from "express";
 import auth from "../authentication/auth";
-import UserModel from "../models/userDoc";
 import bcrypt from "bcryptjs";
 import { TokenUser } from "../types";
-import RoleModel from "../models/roleDoc";
-import UserRoleModel from "../models/userRoleDoc";
 import { generateOTP, transporter } from "../utils";
 import { holdedUsers } from "../global";
 import { PrismaClient } from "@prisma/client";
 
 class UserServices {
-  UserRegister = async (req: Request, res: Response) => {
-    try {
-      const { username, email, password } = req.body;
-      const profileImage = req.file;
 
-      if (!username || !email || !password) {
-        res.status(404).json({ error: "fields are missing !! " });
-        return;
-      }
-      const newUser = new UserModel();
-      const roleModel = new RoleModel();
-      const userRole = new UserRoleModel();
 
-      newUser.username = username;
-      newUser.email = email;
-      const hashPassword = await bcrypt.hash(password, 10);
-      newUser.password = hashPassword;
-
-      const role = await roleModel.save();
-      newUser.roleId = role._id;
-
-      if (profileImage) {
-        // TODO : add the profile Image logic
-      }
-
-      const user = await newUser.save();
-      userRole.userId = user._id;
-      userRole.roleId = role._id;
-
-      await userRole.save();
-
-      res.status(202).json({ message: "user registered!!" });
-      return;
-    } catch (error) {
-      res.status(505).json({ error: `Internal server error` });
-      return;
-    }
-  };
 
   EmployeeLogin = async (req: Request, res: Response) => {
+    const prisma = new PrismaClient();
     try {
       const { email, passcode } = req.body;
       if (!email || !passcode) {
-        res.status(404).json({ error: "credentails missing !!" });
+        res.status(400).json({ error: "Credentials missing!" });
         return;
       }
-      const prisma = new PrismaClient();
 
-      const currentUser = await prisma.user.findUnique({
-        where: {
-          email: email,
-        },
+      const employee = await prisma.employee.findUnique({
+        where: { email },
         include: {
+          profileContent: true,
           personalDetails: true,
           addressDetails: true,
           contactDetails: true,
@@ -75,92 +35,102 @@ class UserServices {
         },
       });
 
-      if (!currentUser) {
-        res
-          .status(404)
-          .json({ error: "User with this email doesn't exists!!" });
+      if (!employee) {
+        res.status(404).json({ error: "Employee with this email doesn't exist!" });
         return;
       }
 
-      const { password, createdAt, updatedAt, ...employeeData }: any =
-        currentUser;
-
-      const verifyPassword = await bcrypt.compare(passcode, password);
+      const verifyPassword = await bcrypt.compare(passcode, employee.password);
       if (!verifyPassword) {
-        res.status(404).json({ error: "Invalid Passcode !!" });
+        res.status(401).json({ error: "Invalid passcode!" });
         return;
       }
 
-      const data = auth.GenerateToken(employeeData);
+      const tokenUser: TokenUser = {
+        id: employee.id,
+        username: employee.name,
+        email: employee.email,
+        role: employee.role || "USER"
+      };
+      const data = auth.GenerateToken(tokenUser);
       if (!data.success) {
-        res.status(505).json({ error: "failed to login !!" });
+        res.status(500).json({ error: "Failed to login!" });
         return;
       }
 
-      const OTP = this.GenerateAndSendOTP(employeeData.email);
-      const userId = currentUser.id.toString();
-      holdedUsers.set(userId, { otp: OTP.toString(), user: data.data });
+      const OTP = this.GenerateAndSendOTP(employee.email);
+      const userId = employee.id.toString();
+      const { createdAt, updatedAt, password, ...employeeInfo } = employee;
+      console.log("this is info" , employeeInfo);
+      holdedUsers.set(userId, { otp: OTP.toString(), user: employeeInfo });
 
-      res.status(200).json({ message: "OTP sent !!", userId: employeeData.id });
+      res.status(200).json({ message: "OTP sent!", userId: employee.id });
       return;
     } catch (error: any) {
-      res.status(505).json({ error: `Internal server error ${error.message}` });
+      res.status(500).json({ error: `Internal server error: ${error.message}` });
       return;
+    } finally {
+      await prisma.$disconnect();
     }
   };
 
   UserLogin = async (req: Request, res: Response) => {
+    const prisma = new PrismaClient();
     try {
       const { email, password } = req.body;
 
       if (!email || !password) {
-        res.status(404).json({ error: "Email or Password Missing!!" });
+        res.status(400).json({ error: "Email or Password Missing!" });
         return;
       }
 
-      const currentUser = await UserModel.findOne({ email: email }).populate(
-        "roleId"
-      );
-      let user: any = currentUser;
+      const user = await prisma.user.findUnique({
+        where: { email },
+        include: {
+          userRoles: { include: { role: true } }
+        }
+      });
 
-      if (!currentUser) {
-        res
-          .status(404)
-          .json({ error: "User with this email doesn't exists!!" });
+      if (!user) {
+        res.status(404).json({ error: "User with this email doesn't exist!" });
         return;
       }
 
-      const verifyPassword = await bcrypt.compare(
-        password,
-        currentUser.password
-      );
+      const verifyPassword = await bcrypt.compare(password, user.password);
       if (!verifyPassword) {
-        res.status(404).json({ error: "Invalid Passcode !!" });
+        res.status(401).json({ error: "Invalid passcode!" });
         return;
+      }
+
+      let roleName = "USER";
+      if (user.userRoles && user.userRoles.length > 0) {
+        roleName = user.userRoles[0].role.roleName;
       }
 
       const userData: TokenUser = {
-        id: currentUser._id.toString(),
-        username: currentUser.username,
-        email: currentUser.email,
-        role: user.roleId.roleName,
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role: roleName
       };
 
       const data = auth.GenerateToken(userData);
       if (!data.success) {
-        res.status(505).json({ error: "failed to login !!" });
+        res.status(500).json({ error: "Failed to login!" });
         return;
       }
 
       const OTP = this.GenerateAndSendOTP(userData.email);
-      const userId = currentUser._id.toString();
+      const userId = user.id.toString();
       holdedUsers.set(userId, { otp: OTP.toString(), user: data.data });
 
-      res.status(200).json({ message: "OTP sent !!", userId: userData.id });
+      res.status(200).json({ message: "OTP sent!", userId: userData.id });
       return;
     } catch (error: any) {
-      res.status(505).json({ error: `Internal server error ${error.message}` });
+      res.status(500).json({ error: `Internal server error: ${error.message}` });
       return;
+    } finally {
+      await prisma.$disconnect();
     }
   };
 
@@ -214,7 +184,7 @@ class UserServices {
     return OTP;
   };
 
-  ValidateOTP = (req: Request, res: Response) => {};
+  ValidateOTP = (req: Request, res: Response) => { };
 }
 
 export const userServices = new UserServices();

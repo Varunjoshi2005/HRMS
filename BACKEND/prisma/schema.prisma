@@ -7,32 +7,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id               String           @id @default(uuid())
+model Employee {
+  id               String           @id @default(cuid())
   email            String           @unique
   cardId           String
   workLocation     String
   name             String
   password         String
-  profileUrl       String?
   designation      String
   phoneNumber      String
   role             String           @default("USER")
   businessUnit     String
   department       String
   reportManager    String?
+  profileContent   ProfileContent?
   personalDetails  PrimaryDetails?
   contactDetails   ContactDetails?
   addressDetails   AddressDetails?
   indentityDetails IdentityDetails?
+  Comment          Comment?
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
-  Comment          Comment?
+}
+
+model ProfileContent {
+  id          String   @id @default(cuid())
+  buffer      Bytes
+  contentType String
+  user        Employee @relation(fields: [employeeId], references: [id])
+  employeeId  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([employeeId])
 }
 
 model PrimaryDetails {
   id                 String   @id @default(uuid())
-  user               User     @relation(fields: [userId], references: [id])
+  user               Employee @relation(fields: [userId], references: [id])
   userId             String   @unique
   firstName          String
   middleName         String?
@@ -50,7 +62,7 @@ model PrimaryDetails {
 
 model ContactDetails {
   id              String   @id @default(uuid())
-  user            User     @relation(fields: [userId], references: [id])
+  user            Employee @relation(fields: [userId], references: [id])
   userId          String   @unique
   workEmail       String
   personalEmail   String
@@ -63,7 +75,7 @@ model ContactDetails {
 
 model AddressDetails {
   id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
+  user      Employee @relation(fields: [userId], references: [id])
   userId    String   @unique
   address   String
   zipCode   String
@@ -75,7 +87,7 @@ model AddressDetails {
 
 model IdentityDetails {
   id            String          @id @default(uuid())
-  user          User            @relation(fields: [userId], references: [id])
+  user          Employee        @relation(fields: [userId], references: [id])
   userId        String          @unique
   addharDetails AddharDetails?
   panDetails    PanCardDetails?
@@ -112,9 +124,81 @@ model PanCardDetails {
 model Comment {
   id        String   @id @default(uuid())
   comment   String
-  user      User     @relation(fields: [userId], references: [id])
+  user      Employee @relation(fields: [userId], references: [id])
   userId    String   @unique
   postId    String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model User {
+  id       String @id @default(cuid())
+  username String
+  email    String @unique
+  password String
+
+  profileContent UserProfileContent?
+  posts          Post[]
+  userRoles      UserRole[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserProfileContent {
+  id          String @id @default(cuid())
+  buffer      Bytes
+  contentType String
+  user        User   @relation(fields: [userId], references: [id])
+  userId      String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Role {
+  id       String @id @default(cuid())
+  roleName String
+
+  userRoles UserRole[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserRole {
+  id     String @id @default(cuid())
+  userId String
+  roleId String
+
+  user User @relation(fields: [userId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, roleId])
+}
+
+model Post {
+  id       String  @id @default(cuid())
+  caption  String?
+  userId   String
+  likes    Int     @default(0)
+  comments Int     @default(0)
+
+  user        User         @relation(fields: [userId], references: [id])
+  postContent PostContent?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PostContent {
+  id          String @id @default(cuid())
+  buffer      Bytes
+  contentType String
+  postId      String @unique
+
+  post Post @relation(fields: [postId], references: [id])
 }

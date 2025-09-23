@@ -5,26 +5,18 @@ import {
   IdentityDetails,
   PanCardDetails,
   PersonalDetailsProps,
-  UserDetails,
+  EmployeeDetails,
 } from "../types";
 
-const userdata = {
-  username: "naveen sharma",
-  email: "naveenadmin12@yopmail.com",
-  password: "12",
-  imageName: "admin3",
-  role: "ADMIN",
-  contentType: "image/png",
-};
 
-let user: UserDetails = {
+
+let employee: EmployeeDetails = {
   email: "varunjoshi12@yopmail.com",
   cardId: "CARD341",
   workLocation: "Mohali",
   name: "Varun Joshi",
   password: "12",
   designation: "JR. full stack developer",
-  profileUrl: "https://example.com/profile.jpg",
   phoneNumber: "9876543210",
   role: "USER",
   businessUnit: "Ariel Software Solutions",
@@ -93,12 +85,12 @@ const indentityDetails: IdentityDetails = {
   },
 };
 
-let dummyUser = {
-  ...user,
+let employeeData = {
+  ...employee,
   personalDetails: { ...personalDetails },
   contactDetails: { ...contactDetails },
   addressDetails: { ...addressDetails },
   indentityDetails: { ...indentityDetails },
 };
 
-export { dummyUser, userdata };
+export { employeeData };

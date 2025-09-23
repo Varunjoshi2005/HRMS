@@ -10,6 +10,8 @@ function Profile() {
   const [toogleBoxVisisble, setToogleBoxVisible] = useState<boolean>(false);
   const navigate = useNavigate();
   const { user } = useUserContext();
+  const { personalDetails } = user;
+  const initials = `${personalDetails.firstName?.toString().charAt(0) || ''}${personalDetails.lastName?.toString().charAt(0) || ''}`;
 
   const { dispatch } = useUserContext();
   return (
@@ -18,7 +20,7 @@ function Profile() {
         onClick={() => setToogleBoxVisible((prev) => !prev)}
         className={styles.ProfileIcon}
       >
-        {user.profileUrl ? (
+        {user.profileContent ? (
           <img
             src={`${ApiEndPoints.renderEmployeeProfile}/${user.id}`}
             alt=""
@@ -26,7 +28,7 @@ function Profile() {
             style={{ objectFit: "contain", borderRadius: "50%" }}
           />
         ) : (
-          <span>{user.name.charAt(0)}</span>
+          <span>{personalDetails ? `${initials}` : "U"}</span>
         )}
         {toogleBoxVisisble && (
           <div className={styles.dropDownProfileBox}>

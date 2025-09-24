@@ -41,3 +41,25 @@ npx prisma init
 
 npx prisma generate
 npx prisma db push
+
+Hi Naveen Sir,
+
+Please find today's task update below:
+
+Date: 23/09/2025
+
+✅ Completed:-
+
+1. Admin uploaded posts
+2. User Profile Details
+3. Login with two factor authentication via OTP
+
+🔄 In Progress:-
+
+- These are some of the features that are currently in progress :
+
+1. Adding user likes.
+2. feed the post with live comments.
+3. Need to add the toogle view documents id number using credentials.
+
+Varun Joshi

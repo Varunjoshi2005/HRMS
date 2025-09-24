@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import styles from "./AdminDashboard.module.css";
 
 type Employee = {
@@ -51,21 +51,21 @@ export default function AdminDashboard() {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  function resetEmployeeForm() {
-    setEmpFirst("");
-    setEmpLast("");
-    setEmpEmail("");
-    setEmpCardId("");
-    setEmpWorkLocation("");
-    setEmpPassword("");
-    setEmpDesignation("");
-    setEmpPhoneNumber("");
-    setEmpRole("USER");
-    setEmpBusinessUnit("");
-    setEmpDepartment("");
-    setEmpReportManager("");
-    setEmpAvatar(null);
-  }
+//   function resetEmployeeForm() {
+//     setEmpFirst("");
+//     setEmpLast("");
+//     setEmpEmail("");
+//     setEmpCardId("");
+//     setEmpWorkLocation("");
+//     setEmpPassword("");
+//     setEmpDesignation("");
+//     setEmpPhoneNumber("");
+//     setEmpRole("USER");
+//     setEmpBusinessUnit("");
+//     setEmpDepartment("");
+//     setEmpReportManager("");
+//     setEmpAvatar(null);
+//   }
 
   function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -82,7 +82,7 @@ export default function AdminDashboard() {
   function addEmployee(e: React.FormEvent) {
     e.preventDefault();
     const id = "EMP-" + Date.now().toString().slice(-6);
-    // removed dummy logic, now handled by backend
+   
   }
 
   function createPost(e: React.FormEvent) {

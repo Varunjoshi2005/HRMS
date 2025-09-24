@@ -11,7 +11,6 @@ import {
 } from "@/services";
 import { ApiEndPoints } from "@/API";
 import { timeAgo } from "@/utils";
-import loader from "@/assets/loader.gif";
 
 import like from "../../assets/images/like.png";
 import heart from "../../assets/images/heart.png";
@@ -20,7 +19,6 @@ import clap from "../../assets/images/clapping.png";
 import idea from "../../assets/images/idea.png";
 import cloud from "../../assets/images/cloud.png";
 import { useUserContext } from "@/context/UserContext";
-import Loader from "../Loader";
 import SmallLoader from "../SmallLoader";
 
 const likeOptions = [
@@ -51,7 +49,7 @@ function Posts() {
   const [currentPostCommentViewIndex, setCurrentPostViewIndex] = useState<
     number | null
   >(null);
-  const [postLoading , setPostLoading] = useState<boolean>(false);
+  const [postLoading, setPostLoading] = useState<boolean>(false);
 
   const [toogleCommentBox, setToogleCommentBox] = useState<boolean>(false);
   const [commentsLoading, setCommentsLoading] = useState<boolean>(false);
@@ -132,20 +130,39 @@ function Posts() {
   useEffect(() => {
     (async () => {
       setPostLoading(true);
+
       const posts = await FetchPosts(user.token);
+
+      const postsWithLikeStatus = posts.map((post: any) => ({
+        ...post,
+        likeStatus: ""
+      }));
+
       setPostLoading(false);
-      console.log("fetched posts", posts);
-      setAllPosts(posts);
+      console.log("fetched posts with like status", postsWithLikeStatus);
+      setAllPosts(postsWithLikeStatus);
     })();
   }, [user]);
 
-if(postLoading) {
-   return (
-    <div style={{ width : "600px" , display :"flex" , justifyContent : "center" }}>
-       <SmallLoader/>
-    </div>
-   )
-}
+
+
+  function updatedLikeStatus(postId: string, statusName: string) {
+    setAllPosts((prev: any) =>
+      prev.map((post: any) =>
+        post.id === postId ? { ...post, likeStatus: statusName } : post
+      )
+    );
+  }
+
+
+
+  if (postLoading) {
+    return (
+      <div style={{ width: "600px", display: "flex", justifyContent: "center" }}>
+        <SmallLoader />
+      </div>
+    )
+  }
 
   return (
     <>
@@ -236,18 +253,41 @@ if(postLoading) {
                       alignItems: "center",
                     }}
                   >
-                    <ThumbsUp size={15} color="rgb(0, 149, 255)" />
-                    <span>Like</span>
+                    {
+                       eachPost.likeStatus != "" 
+
+                       ? 
+                         <>
+                          {eachPost.likeStatus == "Like" && <img src={like} width={20}></img>}
+                          {eachPost.likeStatus == "Love" && <img src={heart} width={20}></img>}
+                          {eachPost.likeStatus == "Haha" && <img src={laugh} width={20}></img>}
+                          {eachPost.likeStatus == "Clapping" && <img src={clap} width={20}></img>}
+                          {eachPost.likeStatus == "Insightful" && <img src={idea} width={20}></img>}
+                          {eachPost.likeStatus == "Curious" && <img src={cloud} width={20}></img>}
+
+                          
+
+                         </>
+                       : 
+                       <>
+                       <ThumbsUp size={15} color="rgb(0, 149, 255)" />
+                        <span>Like</span>
+                       </>
+
+                    }
+
+
                     {viewLikeOption && likeBarOption == postIndex && (
                       <div
                         style={{ position: "absolute" }}
+
                         onMouseEnter={() => setViewLikeOption(true)}
                         onMouseLeave={() => setViewLikeOption(false)}
                       >
                         <div className={styles.likeOptions}>
                           {likeOptions.map((each, index) => (
-                            <div>
-                              {index == viewItem && <span>{each.name}</span>}
+                            <div onClick={() => updatedLikeStatus(eachPost.id, each.name)}>
+                              {index == viewItem && <span >{each.name}</span>}
                               <img
                                 onMouseEnter={() => {
                                   setViewItem(index);
@@ -346,12 +386,12 @@ if(postLoading) {
             width: "600px",
           }}
         >
-          { 
-          postLoading 
+          {
+            postLoading
 
-          ? <SmallLoader/>: 
-          <span style={{ fontSize : "13px" , color :"gray" }}>no post available!</span>
-             
+              ? <SmallLoader /> :
+              <span style={{ fontSize: "13px", color: "gray" }}>no post available!</span>
+
           }
         </div>
       )}

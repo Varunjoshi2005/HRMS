@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { ApiEndPoints } from "@/API";
 import OtpPopup from "@/Comp/OtpModel";
+import Loader from "@/modules/Loader";
 
 const UserSignInSchema = z.object({
   email: z.string().email(""),
@@ -16,6 +17,7 @@ type UserSignIn = z.infer<typeof UserSignInSchema>;
 const Login: React.FC = () => {
   const [otpModelEnable, setOtpModelEnable] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -28,7 +30,7 @@ const Login: React.FC = () => {
 
   const handleSignIn = async (data: UserSignIn) => {
     console.log("this is the signin data", data);
-
+    setLoading(true);
     try {
       const loginRes = await fetch(ApiEndPoints.loginApi, {
         method: "POST",
@@ -43,14 +45,19 @@ const Login: React.FC = () => {
         setOtpModelEnable(true);
         setUserId(result.userId);
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
       {otpModelEnable && userId && <OtpPopup userId={userId} />}
+      {loading && <Loader />}
       <div className={styles.container}>
         <div className={styles.leftPanel}>
           <div className={styles.logo}>Hire Link</div>

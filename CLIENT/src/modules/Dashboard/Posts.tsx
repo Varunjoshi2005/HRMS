@@ -4,15 +4,31 @@ import { MessageSquare, MoreVertical, ThumbsUp } from "lucide-react";
 import profilePic from "@/assets/userLogo.jpg";
 import { useEffect, useState } from "react";
 import CommentBox from "./CommentBox";
-import { FetchPosts } from "@/services";
+import {
+  FetchPosts,
+  handleAddNewComment,
+  handleFetchCommments,
+} from "@/services";
 import { ApiEndPoints } from "@/API";
 import { timeAgo } from "@/utils";
+import loader from "@/assets/loader.gif";
 
-interface CommentType {
-  username: string;
-  comment: string;
-  time: string;
-}
+import like from "../../assets/images/like.png";
+import heart from "../../assets/images/heart.png";
+import laugh from "../../assets/images/laughing.png";
+import clap from "../../assets/images/clapping.png";
+import idea from "../../assets/images/idea.png";
+import cloud from "../../assets/images/cloud.png";
+import { useUserContext } from "@/context/UserContext";
+
+const likeOptions = [
+  { name: "Like", icon: like },
+  { name: "Love", icon: heart },
+  { name: "Haha", icon: laugh },
+  { name: "Clapping", icon: clap },
+  { name: "Insightful", icon: idea },
+  { name: "Curious", icon: cloud },
+];
 
 function Posts() {
   const [enableCommentBox, setEnableCommentBox] = useState<boolean>(false);
@@ -21,62 +37,102 @@ function Posts() {
   );
 
   const [allPosts, setAllPosts] = useState<any[] | null>(null);
+  const [viewItem, setViewItem] = useState<number>(-1);
+  const [viewLikeOption, setViewLikeOption] = useState<boolean>(false);
+  const [likeBarOption, setLikeBarOption] = useState<number | null>(null);
 
-  const [allComments, setAllComments] = useState<CommentType[]>([
-    { username: "varun joshi", comment: "nice bro", time: "20 sec ago" },
-    { username: "Abhishek Sharma", comment: "amazing bro", time: "12 min ago" },
-    { username: "Naveen sharma", comment: "op bro", time: "40 sec ago" },
-    {
-      username: "other user",
-      comment: "this is the longest comment to check everything working fine",
-      time: "1 min ago",
-    },
-    {
-      username: "other user",
-      comment: "this is the longest comment to check everything working fine",
-      time: "1 min ago",
-    },
-    {
-      username: "other user",
-      comment: "this is the longest comment to check everything working fine",
-      time: "1 min ago",
-    },
-    {
-      username: "other user",
-      comment:
-        "this is the longest comment to check everything working fine sdfdasfdsfdsfdasfsdfdsfdsafdsfdsfsdfdasfds",
-      time: "1 min ago",
-    },
-  ]);
+  const { user } = useUserContext();
 
   const [yourComment, setYourComment] = useState<string>("");
+  const [imageLoadCount, setImagesLoadCount] = useState<number>(0);
 
-  const [listAllComments, setListAllComments] = useState<boolean>(false);
+  const [currentPostId, setCurrentPostId] = useState<string | null>(null);
+  const [currentPostCommentViewIndex, setCurrentPostViewIndex] = useState<
+    number | null
+  >(null);
 
-  function AddComment() {
-    if (yourComment == "") return;
-    setAllComments((prev) => {
+  const [toogleCommentBox, setToogleCommentBox] = useState<boolean>(false);
+  const [totalPosts, setTotalPosts] = useState<number>(0);
+  const [commentsLoading, setCommentsLoading] = useState<boolean>(false);
+
+  const [allComments, setAllComments] = useState<any[] | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      if (!user.token || !currentPostId) return;
+      setCommentsLoading(true);
+      const data = await handleFetchCommments(user.token, currentPostId);
+      setCommentsLoading(false);
+      console.log(data);
+      if (!data.success) {
+        setAllComments(data.comments);
+      }
+      setAllComments(data.comments);
+    })();
+  }, [currentPostId]);
+
+  async function AddComment(postId: string) {
+    if (yourComment.length == 0 || !user.token) {
+      return;
+    }
+    let currentComment = yourComment;
+    const commentData = {
+      token: user.token,
+      comment: currentComment,
+      userId: user.id,
+      postId: postId,
+    };
+
+    setAllComments((prev: any) => {
+      if (prev == null) {
+        return [
+          {
+            id: user.id,
+            name: user.name,
+            comment: yourComment,
+            createdAt: Date.now() - 2000,
+          },
+        ];
+      }
       return [
         ...prev,
-        { username: "new user", comment: yourComment, time: "5 min ago" },
+        {
+          user: { id: user.id, name: user.name },
+          comment: yourComment,
+          createdAt: Date.now() - 2000,
+        },
       ];
     });
 
     setYourComment("");
+    await handleAddNewComment(commentData);
+  }
+
+  function CommentBoxToogle(currentPostIndex: number, postId: string) {
+    if (currentPostIndex != currentPostCommentViewIndex) {
+      setAllComments([]);
+    }
+    if (currentPostIndex == currentPostCommentViewIndex) {
+      setToogleCommentBox((prev) => !prev);
+    }
+
+    setCurrentPostViewIndex(currentPostIndex);
+    setCurrentPostId(postId);
   }
 
   useEffect(() => {
     (async () => {
-      console.log("fetch all posts");
-      const posts = await FetchPosts();
+      const posts = await FetchPosts(user.token);
+      console.log("fetched posts", posts);
       setAllPosts(posts);
+      setTotalPosts(posts.length);
     })();
-  }, []);
+  }, [user]);
 
   return (
     <>
-      {allPosts &&
-        allPosts.map((each, index) => (
+      {allPosts && allPosts.length > 0 ? (
+        allPosts.map((eachPost, postIndex) => (
           <div
             className={`${styles.postContainer} ${dashStyles.centerContainerLayout}`}
           >
@@ -86,7 +142,7 @@ function Posts() {
                   <div>
                     <img
                       src={
-                        `${ApiEndPoints.renderProfileApi}/${each.userId._id}` ||
+                        `${ApiEndPoints.renderProfileApi}/${eachPost.userId}` ||
                         profilePic
                       }
                       alt=""
@@ -107,9 +163,11 @@ function Posts() {
                       gap: "3px",
                     }}
                   >
-                    <span>{each.caption.toString().substring(0, 60)}...</span>
+                    <span>
+                      {eachPost.caption.toString().substring(0, 60)}...
+                    </span>
                     <span style={{ fontSize: "10px", opacity: "0.7" }}>
-                      {timeAgo(each.createdAt)}
+                      {timeAgo(eachPost.createdAt)}
                     </span>
                   </div>
                 </div>
@@ -119,7 +177,9 @@ function Posts() {
               <div className={styles.userPost}>
                 <div style={{ width: "90%", height: "90%" }}>
                   <img
-                    src={`${ApiEndPoints.renderPostApi}/${each._id}`}
+                    src={`${ApiEndPoints.renderPostApi}/${eachPost.id}`}
+                    onLoad={() => setImagesLoadCount((prev) => prev + 1)}
+                    onError={() => setImagesLoadCount((prev) => prev + 1)}
                     alt=""
                     style={{
                       objectFit: "contain",
@@ -141,29 +201,64 @@ function Posts() {
                     alignItems: "center",
                   }}
                 >
-                  <span
+                  <div
+                    onMouseEnter={() => {
+                      setViewLikeOption(true);
+                      setLikeBarOption(postIndex);
+                    }}
+                    onMouseLeave={() => {
+                      setViewLikeOption(false);
+                      setLikeBarOption(null);
+                    }}
                     style={{
                       display: "flex",
+                      height: "30px",
                       gap: "5px",
                       cursor: "pointer",
+                      position: "relative",
                       justifyContent: "center",
                       alignItems: "center",
                     }}
                   >
                     <ThumbsUp size={15} color="rgb(0, 149, 255)" />
                     <span>Like</span>
-                  </span>
+                    {viewLikeOption && likeBarOption == postIndex && (
+                      <div
+                        style={{ position: "absolute" }}
+                        onMouseEnter={() => setViewLikeOption(true)}
+                        onMouseLeave={() => setViewLikeOption(false)}
+                      >
+                        <div className={styles.likeOptions}>
+                          {likeOptions.map((each, index) => (
+                            <div>
+                              {index == viewItem && <span>{each.name}</span>}
+                              <img
+                                onMouseEnter={() => {
+                                  setViewItem(index);
+                                }}
+                                onMouseLeave={() => {
+                                  setViewItem(-1);
+                                }}
+                                src={each.icon}
+                                alt=""
+                                width={25}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
                   <span
                     onClick={() => {
                       setEnableCommentBox((prev) => {
-                        if (selectedCommentBox == index) {
+                        if (selectedCommentBox == postIndex) {
                           return !prev;
                         }
                         return true;
                       });
-                      setSelectedCommentBox(index);
-                      setListAllComments(false);
+                      setSelectedCommentBox(postIndex);
                     }}
                     style={{
                       display: "flex",
@@ -179,24 +274,17 @@ function Posts() {
                 </div>
 
                 <span
-                  onClick={() => {
-                    setListAllComments((prev) => !prev);
-                  }}
+                  onClick={() => CommentBoxToogle(postIndex, eachPost.id)}
                   style={{ padding: "5px", opacity: "0.6", cursor: "pointer" }}
                 >
-                  {each.comments} Comments
+                  {eachPost.comments} Comments
                 </span>
               </div>
 
               {enableCommentBox &&
                 selectedCommentBox != null &&
-                selectedCommentBox == index && (
+                selectedCommentBox == postIndex && (
                   <div className={styles.CommentBox}>
-                    <CommentBox
-                      listAllComments={listAllComments}
-                      allComments={allComments}
-                    />
-
                     <div className={styles.addComment}>
                       <img
                         src={profilePic}
@@ -211,7 +299,7 @@ function Posts() {
                       <input
                         onKeyDown={(e) => {
                           if (e.key == "Enter" && yourComment != "") {
-                            AddComment();
+                            AddComment(eachPost.id);
                           }
                         }}
                         type="text"
@@ -222,9 +310,29 @@ function Posts() {
                     </div>
                   </div>
                 )}
+              {toogleCommentBox &&
+                currentPostCommentViewIndex == postIndex &&
+                currentPostId && (
+                  <CommentBox
+                    allComments={allComments}
+                    commentsLoading={commentsLoading}
+                  />
+                )}
             </div>
           </div>
-        ))}
+        ))
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "500px",
+          }}
+        >
+          <img src={loader} alt="" width={40} />
+        </div>
+      )}
     </>
   );
 }

@@ -4,7 +4,6 @@ import { uploadPath } from "../path";
 import { PrismaClient } from "@prisma/client";
 
 class PostServices {
-
   uploadPost = async (req: Request, res: Response) => {
     const prisma = new PrismaClient();
     try {
@@ -19,11 +18,11 @@ class PostServices {
       const user = await prisma.user.findUnique({
         where: { id: userId },
         include: {
-          userRoles: { include: { role: true } }
-        }
+          userRoles: { include: { role: true } },
+        },
       });
 
-      if (!user || !user.userRoles.some(ur => ur.role.roleName === "ADMIN")) {
+      if (!user || !user.userRoles.some((ur) => ur.role.roleName === "ADMIN")) {
         res.status(403).json({ error: "Not allowed to post!" });
         return;
       }
@@ -41,11 +40,11 @@ class PostServices {
           postContent: {
             create: {
               buffer: postFile.buffer,
-              contentType: postFile.mimetype
-            }
-          }
+              contentType: postFile.mimetype,
+            },
+          },
         },
-        include: { postContent: true }
+        include: { postContent: true },
       });
 
       if (!post) {
@@ -66,6 +65,7 @@ class PostServices {
 
   AddNewComment = async (req: Request, res: Response) => {
     try {
+      console.log("this is the data", req.body);
       const { comment, userId, postId } = req.body;
       const prisma = new PrismaClient();
 
@@ -115,11 +115,16 @@ class PostServices {
           user: {
             select: {
               username: true,
-              email: true
-            }
+              email: true,
+            },
           },
-          postContent: true
-        }
+          postContent: {
+            select: {
+              id: true,
+              contentType: true,
+            },
+          },
+        },
       });
       console.log(posts);
       if (!posts || posts.length === 0) {
@@ -129,7 +134,9 @@ class PostServices {
       res.status(200).json({ posts });
       return;
     } catch (error: any) {
-      res.status(500).json({ error: "Internal server error: Failed to get posts!" });
+      res
+        .status(500)
+        .json({ error: "Internal server error: Failed to get posts!" });
       console.log(error.message);
       return;
     } finally {

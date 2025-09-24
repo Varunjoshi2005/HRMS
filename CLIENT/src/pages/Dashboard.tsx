@@ -68,7 +68,7 @@ function Dashboard() {
             className={styles.centerContainerLayout}
           >
             <span>ORGANIZATION : </span>
-            <span>Ariel software solutions</span>
+            <span>Ariel Software Solutions Pvt Ltd</span>
           </div>
           <div
             className={`${styles.GivePraiseContainer} ${styles.centerContainerLayout}`}

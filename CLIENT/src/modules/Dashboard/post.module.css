@@ -4,7 +4,7 @@
 }
 
 .SinglePostContainer {
-  min-height: 500px;
+  min-height: 400px;
   max-width: 700px;
   width: 100%;
   background: #fff;
@@ -28,6 +28,7 @@
 .userPost {
   width: 100%;
   display: flex;
+  padding: 5px;
   justify-content: center;
   align-items: center;
 }
@@ -36,6 +37,7 @@
   width: 100%;
   font-size: 12px;
   display: flex;
+  margin-top: 5px;
   justify-content: space-between;
   border-top: 1px solid #ccc;
 }
@@ -114,4 +116,36 @@
 
 hr {
   color: rgb(0, 149, 255);
+}
+
+.likeOptions {
+  position: absolute;
+  width: 220px;
+  display: flex;
+  gap: 10px;
+  right: -190px;
+  background-color: #fff;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+  top: -50px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  height: 40px;
+}
+
+.likeOptions img {
+  transition: transform 200ms ease;
+}
+
+.likeOptions img:hover {
+  transform: translateY(-10px) scale(1.2);
+}
+
+.likeOptions span {
+  position: absolute;
+  top: -30px;
+  background-color: white;
+  padding: 2px;
+  font-size: 15px;
+  border-radius: 5px;
 }

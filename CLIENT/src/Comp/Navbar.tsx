@@ -4,10 +4,9 @@ import { Bell, Search } from "lucide-react";
 import { useGlobalContext } from "@/context/GlobalContext";
 
 function Navbar() {
-
-  const {selectedBgColor} = useGlobalContext();
+  const { selectedBgColor } = useGlobalContext();
   return (
-    <nav data-navbar style={{ background : selectedBgColor  }}>
+    <nav data-navbar style={{ background: selectedBgColor }}>
       <div
         style={{
           display: "flex",
@@ -16,9 +15,11 @@ function Navbar() {
           width: "80%",
         }}
       >
-        <span className={styles.logo} >Hire-Link</span>
+        <span className={styles.logo}>Hire-Link</span>
 
-        <span style={{ fontSize: "14px" }}>Ariel Software Solutions</span>
+        <span style={{ fontSize: "14px" }}>
+          Ariel Software Solutions Pvt Ltd
+        </span>
 
         <div className={styles.search}>
           <Search size={20} color="gray" />

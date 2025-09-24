@@ -6,6 +6,7 @@ import ProfileLayout from "./Layouts/ProfileLayout";
 import MainProfile from "./Comp/MainProfile";
 import Organization from "./pages/Organisation";
 import { useUserContext } from "./context/UserContext";
+import NotFound404 from "./pages/Not-found/NotFound";
 
 function App() {
   const { user } = useUserContext();
@@ -31,8 +32,8 @@ function App() {
             </Route>
             <Route path="/org" element={<Organization />} />
             <Route path="/other" element={<div>Other route</div>} />
-            // Add more routes here as needed
           </Route>
+          <Route path="*" element={<NotFound404 />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -19,9 +19,9 @@ function timeAgo(timestamp) {
 }
 
 
-const string = "varun";
+const string = "ABCDE1234F";
 
-console.log(string.toString().charAt(0));
+console.log(string.toString().substring(7, 10));
 
 
 

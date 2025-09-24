@@ -25,7 +25,7 @@ model Employee {
   contactDetails   ContactDetails?
   addressDetails   AddressDetails?
   indentityDetails IdentityDetails?
-  Comment          Comment?
+  Comment          Comment[]
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
 }
@@ -124,9 +124,9 @@ model PanCardDetails {
 model Comment {
   id        String   @id @default(uuid())
   comment   String
+  userId    String
+  postId    String
   user      Employee @relation(fields: [userId], references: [id])
-  userId    String   @unique
-  postId    String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

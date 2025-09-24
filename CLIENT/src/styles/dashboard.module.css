@@ -19,10 +19,13 @@
 .wallpaperContainer {
   position: relative;
   display: flex;
+  color: white;
   align-items: center;
   background-image: url("../assets/wallpaper.png");
-  width: 600px;
-  height: 50px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 1200px;
+  height: 100px;
   overflow: hidden;
   border-radius: 10px;
   object-fit: cover;
@@ -71,7 +74,6 @@
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   padding: 10px;
   width: 450px;
-
 }
 
 .GivePraiseContainer input {
@@ -102,14 +104,12 @@
   border-bottom: 2px solid rgb(0, 140, 255);
 }
 
-
 .feedContainer {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
   margin-top: 1.5rem;
 }
-
 
 .surveyCard {
   flex-direction: column;
@@ -157,4 +157,3 @@
   border-radius: 6px;
   cursor: pointer;
 }
-

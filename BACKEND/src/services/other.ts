@@ -1,34 +1,11 @@
 import { Request, Response } from "express";
 import { holdedUsers } from "../global";
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 class OtherServices {
-
-  verifyOtp(req: Request, res: Response) {
-    try {
-      const { otp, userId } = req.body;
-      if (!otp || otp.length < 5 || !userId) {
-        return res.status(400).json({ error: "Invalid OTP" });
-      }
-
-      const data = holdedUsers.get(userId);
-      console.log("this is the data", data);
-      if (!data?.otp || !data?.user) {
-        return res.status(400).json({ error: "User/OTP not exists" });
-      }
-      if (data.otp !== otp) {
-        return res.status(400).json({ error: "Invalid OTP" });
-      }
-      holdedUsers.delete(userId);
-      return res.status(200).json({ message: "OTP verified", data: data.user });
-    } catch (error) {
-      console.error("verifyOtp error:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-  }
-
   renderPostImage = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
@@ -45,8 +22,12 @@ class OtherServices {
         return res.status(404).json({ error: "Post image doesn't exist" });
       }
 
-      res.setHeader("Content-Type", post.postContent.contentType || "image/jpg");
-      return res.send(Buffer.from(post.postContent.buffer));
+      res.setHeader(
+        "Content-Type",
+        post.postContent.contentType || "image/jpg"
+      );
+      res.send(post.postContent.buffer);
+      return;
     } catch (error) {
       console.error("renderPostImage error:", error);
       return res.status(500).json({ error: "Internal error: Image not found" });
@@ -69,8 +50,12 @@ class OtherServices {
         return res.status(404).json({ error: "Profile image doesn't exist" });
       }
 
-      res.setHeader("Content-Type", user.profileContent.contentType || "image/jpg");
-      return res.send(Buffer.from(user.profileContent.buffer));
+      res.setHeader(
+        "Content-Type",
+        user.profileContent.contentType || "image/jpg"
+      );
+      res.send(Buffer.from(user.profileContent.buffer));
+      return;
     } catch (error) {
       console.error("renderProfileImage error:", error);
       return res.status(500).json({ error: "Internal error: Image not found" });
@@ -90,11 +75,18 @@ class OtherServices {
         include: { profileContent: true },
       });
 
-      if (!employee || !employee.profileContent || !employee.profileContent.buffer) {
+      if (
+        !employee ||
+        !employee.profileContent ||
+        !employee.profileContent.buffer
+      ) {
         return res.status(404).json({ error: "Profile image doesn't exist" });
       }
 
-      res.setHeader("Content-Type", employee.profileContent.contentType || "image/jpg");
+      res.setHeader(
+        "Content-Type",
+        employee.profileContent.contentType || "image/jpg"
+      );
       return res.send(Buffer.from(employee.profileContent.buffer));
     } catch (error) {
       console.error("renderEmployeeImage error:", error);
@@ -132,7 +124,48 @@ class OtherServices {
       return res.status(200).json({ comments });
     } catch (error) {
       console.error("fetchAllComments error:", error);
-      return res.status(500).json({ error: "Internal error: Comments not found" });
+      return res
+        .status(500)
+        .json({ error: "Internal error: Comments not found" });
+    }
+  };
+
+  verifyUserPasscode = async (req: Request, res: Response) => {
+    try {
+      const { userId, currentPassword } = req.body;
+      if (!userId || !currentPassword) {
+        res.status(404).json({ error: "field's required!!" });
+        return;
+      }
+
+      const user = await prisma.employee.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+
+      if (!user) {
+        res.status(404).json({ error: "user doesn't exists!!" });
+        return;
+      }
+
+      const checkPassword = await bcrypt.compare(
+        currentPassword,
+        user.password
+      );
+
+      if (!checkPassword) {
+        res.status(404).json({ error: "invalid password!!" });
+        return;
+      }
+
+      res.status(202).json({ message: "veified !!" });
+      return;
+    } catch (error) {
+      console.error("fetchAllComments error:", error);
+      return res
+        .status(500)
+        .json({ error: "Internal error: Comments not found" });
     }
   };
 }

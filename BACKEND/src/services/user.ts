@@ -7,9 +7,6 @@ import { holdedUsers } from "../global";
 import { PrismaClient } from "@prisma/client";
 
 class UserServices {
-
-
-
   EmployeeLogin = async (req: Request, res: Response) => {
     const prisma = new PrismaClient();
     try {
@@ -36,7 +33,9 @@ class UserServices {
       });
 
       if (!employee) {
-        res.status(404).json({ error: "Employee with this email doesn't exist!" });
+        res
+          .status(404)
+          .json({ error: "Employee with this email doesn't exist!" });
         return;
       }
 
@@ -50,7 +49,7 @@ class UserServices {
         id: employee.id,
         username: employee.name,
         email: employee.email,
-        role: employee.role || "USER"
+        role: employee.role || "USER",
       };
       const data = auth.GenerateToken(tokenUser);
       if (!data.success) {
@@ -60,14 +59,21 @@ class UserServices {
 
       const OTP = this.GenerateAndSendOTP(employee.email);
       const userId = employee.id.toString();
-      const { createdAt, updatedAt, password, ...employeeInfo } = employee;
-      console.log("this is info" , employeeInfo);
-      holdedUsers.set(userId, { otp: OTP.toString(), user: employeeInfo });
+      const { createdAt, updatedAt, password, ...employeeRemaning } = employee;
+      console.log("this is info", employeeRemaning);
+      let employeeInfo: any = { ...employeeRemaning };
+      employeeInfo.token = data.data?.token;
+      holdedUsers.set(userId, {
+        otp: OTP.toString(),
+        user: employeeInfo,
+      });
 
       res.status(200).json({ message: "OTP sent!", userId: employee.id });
       return;
     } catch (error: any) {
-      res.status(500).json({ error: `Internal server error: ${error.message}` });
+      res
+        .status(500)
+        .json({ error: `Internal server error: ${error.message}` });
       return;
     } finally {
       await prisma.$disconnect();
@@ -87,8 +93,8 @@ class UserServices {
       const user = await prisma.user.findUnique({
         where: { email },
         include: {
-          userRoles: { include: { role: true } }
-        }
+          userRoles: { include: { role: true } },
+        },
       });
 
       if (!user) {
@@ -111,7 +117,7 @@ class UserServices {
         id: user.id,
         username: user.username,
         email: user.email,
-        role: roleName
+        role: roleName,
       };
 
       const data = auth.GenerateToken(userData);
@@ -127,7 +133,9 @@ class UserServices {
       res.status(200).json({ message: "OTP sent!", userId: userData.id });
       return;
     } catch (error: any) {
-      res.status(500).json({ error: `Internal server error: ${error.message}` });
+      res
+        .status(500)
+        .json({ error: `Internal server error: ${error.message}` });
       return;
     } finally {
       await prisma.$disconnect();
@@ -184,7 +192,28 @@ class UserServices {
     return OTP;
   };
 
-  ValidateOTP = (req: Request, res: Response) => { };
+  verifyOtp(req: Request, res: Response) {
+    try {
+      const { otp, userId } = req.body;
+      if (!otp || otp.length < 5 || !userId) {
+        return res.status(400).json({ error: "Invalid OTP" });
+      }
+
+      const data = holdedUsers.get(userId);
+      console.log("this is the data", data);
+      if (!data?.otp || !data?.user) {
+        return res.status(400).json({ error: "User/OTP not exists" });
+      }
+      if (data.otp !== otp) {
+        return res.status(400).json({ error: "Invalid OTP" });
+      }
+      holdedUsers.delete(userId);
+      return res.status(200).json({ message: "OTP verified", data: data.user });
+    } catch (error) {
+      console.error("verifyOtp error:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
 }
 
 export const userServices = new UserServices();

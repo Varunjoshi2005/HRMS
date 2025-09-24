@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 import UserRoute from "./routers/userRoutes";
 import PostRoute from "./routers/postRoutes";
 import OtherRoute from "./routers/otherRoutes";
+import auth from "./authentication/auth";
+import RenderRoute from "./routers/renderRoute";
 
 import http from "http";
 dotenv.config();
@@ -31,8 +33,10 @@ const startServer = async () => {
     );
 
     app.use("/account", UserRoute);
-    app.use("/post", PostRoute);
-    app.use("/api", OtherRoute);
+    app.use("/post", auth.AuthenticateUser, PostRoute);
+    app.use("/api", auth.AuthenticateUser, OtherRoute);
+
+    app.use("/render", RenderRoute);
 
     server.listen(Config.port, () => {
       console.log(`Server running on port : ${Config.port}!!`);

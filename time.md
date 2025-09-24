@@ -46,22 +46,26 @@ Hi Naveen Sir,
 
 Please find today's task update below:
 
-Date: 23/09/2025
+Date: 24/09/2025
 
 ✅ Completed:-
 
-1. Admin uploaded posts
-2. User Profile Details
-3. Login with two factor authentication via OTP
+1. User can add their comments in any post!
+2. User can view their aadhaar , pan number by entering their password.
+3. Created employees directory page.
+4. Updated ui and added user like options.
 
 🔄 In Progress:-
 
 - These are some of the features that are currently in progress :
 
-1. Adding user likes.
-2. feed the post with live comments.
-3. Need to add the toogle view documents id number using credentials.
+1. Add the live data in the employee directory!
+2. Admin page from where admin can add user and upload posts!
+3. Birthday , work aniversary of the employees!
 
+Thankyou
+
+Best regards
 Varun Joshi
 
 background-image: url(&quot;https://cdn.keka.com/shared/assets/images/background/bg-banner-purple.jpg&quot;)

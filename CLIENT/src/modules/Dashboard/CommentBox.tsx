@@ -1,17 +1,17 @@
 import styles from "./post.module.css";
 import profilePic from "@/assets/userLogo.jpg";
+import { useGlobalContext } from "@/context/GlobalContext";
+import { timeAgo } from "@/utils";
+import SmallLoader from "../SmallLoader";
 
-interface CommentBoxProps {
-  listAllComments: boolean;
-  allComments: any[];
-}
+function CommentBox({ allComments, commentsLoading }: any) {
+  const { selectedBgColor } = useGlobalContext();
 
-function CommentBox({ listAllComments, allComments }: CommentBoxProps) {
   return (
     <>
-      {listAllComments && allComments && (
+      {allComments && allComments.length > 0 ? (
         <div className={styles.listAllComments}>
-          {allComments.map((each, index) => (
+          {allComments.map((each: any, index: number) => (
             <div className={styles.eachComment}>
               <img
                 src={profilePic}
@@ -34,11 +34,11 @@ function CommentBox({ listAllComments, allComments }: CommentBoxProps) {
                       minWidth: "100px",
                     }}
                   >
-                    {each.username}
+                    {each.user.name}
                   </span>
 
                   <span style={{ fontSize: "10px", color: "gray" }}>
-                    {each.time}
+                    {timeAgo(each.createdAt)}
                   </span>
                 </span>
 
@@ -69,6 +69,16 @@ function CommentBox({ listAllComments, allComments }: CommentBoxProps) {
             </span>
           </div>
         </div>
+      ) : (
+        <span
+          style={{ fontSize: "13px", padding: "5px", color: selectedBgColor }}
+        >
+          {commentsLoading ? (
+            <SmallLoader />
+          ) : (
+            <span>Be the first person to comment</span>
+          )}
+        </span>
       )}
     </>
   );

@@ -2,10 +2,6 @@ import type { Response, Request, RequestHandler } from "express";
 import { otherServices } from "../services/other";
 
 class PostController {
-  handleVerifyOtp: RequestHandler = (req: Request, res: Response) => {
-    otherServices.verifyOtp(req, res);
-  };
-
   handleRenderPost: RequestHandler = (req: Request, res: Response) => {
     otherServices.renderPostImage(req, res);
   };
@@ -23,6 +19,10 @@ class PostController {
 
   handleFetchComments: RequestHandler = (req: Request, res: Response) => {
     otherServices.fetchAllComments(req, res);
+  };
+
+  handleVerifyPasscode: RequestHandler = (req: Request, res: Response) => {
+    otherServices.verifyUserPasscode(req, res);
   };
 }
 

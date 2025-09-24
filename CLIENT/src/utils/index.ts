@@ -18,7 +18,7 @@ const Options = [
   { name: "Inbox", icon: Inbox, link: "/inbox" },
   { name: "My teams", icon: Building2, link: "/my-teams" },
   { name: "My Finance", icon: User, link: "/my-finance" },
-  { name: "Org", icon: BarChart3, link: "/org" },
+  { name: "Org", icon: BarChart3, link: "/org/employees" },
   {
     name: "Engage",
     icon: MessageSquare,

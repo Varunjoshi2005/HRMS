@@ -39,7 +39,7 @@ function App() {
             <Route path="/profile" element={<ProfileLayout />}>
               <Route index element={<MainProfile />} />
             </Route>
-            <Route path="/org/employee" element={<Organization />} />
+            <Route path="/org/employees" element={<Organization />} />
           </Route>
           <Route path="*" element={<NotFound404 />} />
         </Routes>

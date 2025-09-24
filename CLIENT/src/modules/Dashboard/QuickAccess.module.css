@@ -1,0 +1,123 @@
+.quickAccess {
+  display: grid;
+  gap: 16px;
+
+  height: 150px;
+  padding : 20px;
+  max-width: 600px;
+  font-family: Arial, sans-serif;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.card h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color :black;
+
+}
+
+.card p {
+  margin: 0;
+  color :black;
+
+
+  font-size: 14px;
+}
+
+.card small {
+  color :black;
+
+
+  font-size: 12px;
+}
+
+.actionBtn {
+  background: #3cb371;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.actionBtn:hover {
+  background: #2e8b57;
+}
+
+.holidayContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.holidayName {
+  color: #3cb371;
+  margin: 0;
+}
+
+.holidayImage {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.timeCard {
+  background: #a58ad4;
+  color: white;
+  text-align: center;
+}
+
+.timeLabel {
+  font-size: 12px;
+  margin: 4px 0;
+}
+
+.time {
+  font-size: 24px;
+  margin: 0;
+}
+
+.leaveBalance {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.leaveCircle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #e6f7ff;
+  border: 3px solid #3cb371;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: #333;
+  font-size: 13px;
+  text-align: center;
+}
+
+.links a {
+  color: #3cb371;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}
+
+.quickLinks {
+  background: #d58ad4;
+  color: white;
+}

@@ -7,6 +7,8 @@ import MainProfile from "./Comp/MainProfile";
 import Organization from "./pages/Organisation";
 import { useUserContext } from "./context/UserContext";
 import NotFound404 from "./pages/Not-found/NotFound";
+import AdminLogin from "./pages/Admin/Admin";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
 
 function App() {
   const { user } = useUserContext();
@@ -21,6 +23,14 @@ function App() {
             element={!user ? <Login /> : <Navigate to={"/"} />}
           />
 
+
+          <Route
+            path="/admin-login"
+            element={<AdminLogin />}
+          />
+
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+
           <Route
             path="/"
             element={user ? <AppLayout /> : <Navigate to={"/login"} />}
@@ -28,10 +38,8 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="/profile" element={<ProfileLayout />}>
               <Route index element={<MainProfile />} />
-              <Route path="other" element={<div>Hi this is other</div>} />
             </Route>
-            <Route path="/org" element={<Organization />} />
-            <Route path="/other" element={<div>Other route</div>} />
+            <Route path="/org/employee" element={<Organization />} />
           </Route>
           <Route path="*" element={<NotFound404 />} />
         </Routes>

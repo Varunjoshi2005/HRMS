@@ -21,19 +21,17 @@
   display: flex;
   color: white;
   align-items: center;
-  background-image: url("../assets/wallpaper.png");
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-image: url("../assets/images/bg.png");
+  background-size: contain;
   width: 1200px;
   height: 100px;
   overflow: hidden;
   border-radius: 10px;
-  object-fit: cover;
 }
 
 .wallpaperText {
   font-size: 1.5rem;
-  color: white;
+  color: rgb(255, 255, 255);
   margin-left: 10px;
   font-weight: bolder;
 }
@@ -70,10 +68,10 @@
 .centerContainerLayout {
   display: flex;
   background: #fff;
-
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  padding: 10px;
-  width: 450px;
+  padding: 20px;
+  border-radius: 10px;
+  width: 600px;
 }
 
 .GivePraiseContainer input {

@@ -20,6 +20,8 @@ import clap from "../../assets/images/clapping.png";
 import idea from "../../assets/images/idea.png";
 import cloud from "../../assets/images/cloud.png";
 import { useUserContext } from "@/context/UserContext";
+import Loader from "../Loader";
+import SmallLoader from "../SmallLoader";
 
 const likeOptions = [
   { name: "Like", icon: like },
@@ -44,15 +46,14 @@ function Posts() {
   const { user } = useUserContext();
 
   const [yourComment, setYourComment] = useState<string>("");
-  const [imageLoadCount, setImagesLoadCount] = useState<number>(0);
 
   const [currentPostId, setCurrentPostId] = useState<string | null>(null);
   const [currentPostCommentViewIndex, setCurrentPostViewIndex] = useState<
     number | null
   >(null);
+  const [postLoading , setPostLoading] = useState<boolean>(false);
 
   const [toogleCommentBox, setToogleCommentBox] = useState<boolean>(false);
-  const [totalPosts, setTotalPosts] = useState<number>(0);
   const [commentsLoading, setCommentsLoading] = useState<boolean>(false);
 
   const [allComments, setAllComments] = useState<any[] | null>(null);
@@ -68,6 +69,7 @@ function Posts() {
         setAllComments(data.comments);
       }
       setAllComments(data.comments);
+
     })();
   }, [currentPostId]);
 
@@ -109,6 +111,13 @@ function Posts() {
   }
 
   function CommentBoxToogle(currentPostIndex: number, postId: string) {
+    if (currentPostCommentViewIndex == null) {
+      setCurrentPostViewIndex(currentPostIndex);
+      setToogleCommentBox(true);
+      setCurrentPostId(postId);
+      return;
+    }
+
     if (currentPostIndex != currentPostCommentViewIndex) {
       setAllComments([]);
     }
@@ -122,12 +131,21 @@ function Posts() {
 
   useEffect(() => {
     (async () => {
+      setPostLoading(true);
       const posts = await FetchPosts(user.token);
+      setPostLoading(false);
       console.log("fetched posts", posts);
       setAllPosts(posts);
-      setTotalPosts(posts.length);
     })();
   }, [user]);
+
+if(postLoading) {
+   return (
+    <div style={{ width : "600px" , display :"flex" , justifyContent : "center" }}>
+       <SmallLoader/>
+    </div>
+   )
+}
 
   return (
     <>
@@ -178,8 +196,6 @@ function Posts() {
                 <div style={{ width: "90%", height: "90%" }}>
                   <img
                     src={`${ApiEndPoints.renderPostApi}/${eachPost.id}`}
-                    onLoad={() => setImagesLoadCount((prev) => prev + 1)}
-                    onError={() => setImagesLoadCount((prev) => prev + 1)}
                     alt=""
                     style={{
                       objectFit: "contain",
@@ -327,10 +343,16 @@ function Posts() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            width: "500px",
+            width: "600px",
           }}
         >
-          <img src={loader} alt="" width={40} />
+          { 
+          postLoading 
+
+          ? <SmallLoader/>: 
+          <span style={{ fontSize : "13px" , color :"gray" }}>no post available!</span>
+             
+          }
         </div>
       )}
     </>

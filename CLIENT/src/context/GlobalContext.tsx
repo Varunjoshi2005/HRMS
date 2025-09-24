@@ -3,6 +3,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 interface ContextPayload {
   user: any;
   setUser: React.Dispatch<React.SetStateAction<any>>;
+  setSelectedBgColor : React.Dispatch<React.SetStateAction<string>>;
+  selectedBgColor : string;
 }
 
 const GlobalContext = createContext<ContextPayload | undefined>(undefined);
@@ -21,6 +23,8 @@ export function GlobalContextProvider({
   children: React.ReactNode;
 }) {
   const [user, setUser] = useState<any>("");
+  const [selectedBgColor , setSelectedBgColor] = useState<string>("#5746AF");
+
 
   useEffect(() => {
     const adjustLayout = () => {
@@ -43,7 +47,7 @@ export function GlobalContextProvider({
   }, []);
 
   return (
-    <GlobalContext.Provider value={{ user, setUser }}>
+    <GlobalContext.Provider value={{  selectedBgColor , setSelectedBgColor, user, setUser }}>
       {children}
     </GlobalContext.Provider>
   );

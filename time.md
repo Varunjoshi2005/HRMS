@@ -63,3 +63,5 @@ Date: 23/09/2025
 3. Need to add the toogle view documents id number using credentials.
 
 Varun Joshi
+
+background-image: url(&quot;https://cdn.keka.com/shared/assets/images/background/bg-banner-purple.jpg&quot;)

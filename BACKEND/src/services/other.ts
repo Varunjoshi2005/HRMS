@@ -1,35 +1,31 @@
 import { Request, Response } from "express";
 import { holdedUsers } from "../global";
-import PostModel from "../models/postDoc";
-import fs from "fs/promises";
-import UserModel from "../models/userDoc";
 import { PrismaClient } from "@prisma/client";
 
+const prisma = new PrismaClient();
+
 class OtherServices {
+
   verifyOtp(req: Request, res: Response) {
     try {
       const { otp, userId } = req.body;
       if (!otp || otp.length < 5 || !userId) {
-        res.status(400).json({ error: "Invalid OTP" });
-        return;
+        return res.status(400).json({ error: "Invalid OTP" });
       }
 
       const data = holdedUsers.get(userId);
       console.log("this is the data", data);
       if (!data?.otp || !data?.user) {
-        res.status(400).json({ error: "not exists!!" });
-        return;
+        return res.status(400).json({ error: "User/OTP not exists" });
       }
       if (data.otp !== otp) {
-        res.status(400).json({ error: "Invalid OTP!!" });
-        return;
+        return res.status(400).json({ error: "Invalid OTP" });
       }
       holdedUsers.delete(userId);
-      res.status(200).json({ message: "OTP verified", data: data.user });
-      return;
+      return res.status(200).json({ message: "OTP verified", data: data.user });
     } catch (error) {
-      res.status(500).json({ error: "Internal Server Error" });
-      return;
+      console.error("verifyOtp error:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
     }
   }
 
@@ -37,23 +33,23 @@ class OtherServices {
     try {
       const id = req.params.id;
       if (!id) {
-        res.status(404).json({ error: "post id missing !!" });
-        return;
+        return res.status(404).json({ error: "Post ID missing" });
       }
 
-      const post = await PostModel.findById(id);
-      if (!post || !post.postContent) {
-        res.status(404).json({ error: "Post doesn't exists !!!" });
-        return;
-      }
-      const fileBuffer = await fs.readFile(post.postContent.url);
-      console.log(fileBuffer);
+      const post = await prisma.post.findUnique({
+        where: { id },
+        include: { postContent: true },
+      });
 
-      res.setHeader("Content-Type", post.postContent.contentType);
-      res.send(fileBuffer);
+      if (!post || !post.postContent || !post.postContent.buffer) {
+        return res.status(404).json({ error: "Post image doesn't exist" });
+      }
+
+      res.setHeader("Content-Type", post.postContent.contentType || "image/jpg");
+      return res.send(Buffer.from(post.postContent.buffer));
     } catch (error) {
-      res.status(505).json({ error: "Internal error : Image not found!!" });
-      return;
+      console.error("renderPostImage error:", error);
+      return res.status(500).json({ error: "Internal error: Image not found" });
     }
   };
 
@@ -61,98 +57,82 @@ class OtherServices {
     try {
       const id = req.params.id;
       if (!id) {
-        res.status(404).json({ error: "profile id missing !!" });
-        return;
+        return res.status(404).json({ error: "Profile ID missing" });
       }
 
-      const profile = await UserModel.findById(id);
-      console.log("this is the profile !!", profile);
+      const user = await prisma.user.findUnique({
+        where: { id },
+        include: { profileContent: true },
+      });
 
-      if (!profile || !profile.profileContent) {
-        res.status(404).json({ error: "Post doesn't exists !!!" });
-        return;
+      if (!user || !user.profileContent || !user.profileContent.buffer) {
+        return res.status(404).json({ error: "Profile image doesn't exist" });
       }
-      let url = profile.profileContent.url;
-      if (!url.includes(".")) {
-        url = url + ".jpg";
-      }
-      const fileBuffer = await fs.readFile(url);
-      console.log(fileBuffer);
 
-      res.setHeader("Content-Type", profile.profileContent.contentType);
-      res.send(fileBuffer);
+      res.setHeader("Content-Type", user.profileContent.contentType || "image/jpg");
+      return res.send(Buffer.from(user.profileContent.buffer));
     } catch (error) {
-      console.log(error);
-      res.status(505).json({ error: "Internal error : Image not found!!" });
-      return;
+      console.error("renderProfileImage error:", error);
+      return res.status(500).json({ error: "Internal error: Image not found" });
     }
   };
 
   renderEmployeeImage = async (req: Request, res: Response) => {
     try {
-      const id = req.params.id.toString();
+      const id = req.params.id?.toString();
       console.log("this is the id", id);
-      const prisma = new PrismaClient();
       if (!id) {
-        res.status(404).json({ error: "profile id missing !!" });
-        return;
+        return res.status(404).json({ error: "Profile ID missing" });
       }
 
-      const profile = await prisma.user.findUnique({
-        where: {
-          id: id,
-        },
+      const employee = await prisma.employee.findUnique({
+        where: { id },
+        include: { profileContent: true },
       });
 
-      console.log("this is the profile !!", profile);
-
-      if (!profile || !profile.profileUrl) {
-        res.status(404).json({ error: "Post doesn't exists !!!" });
-        return;
+      if (!employee || !employee.profileContent || !employee.profileContent.buffer) {
+        return res.status(404).json({ error: "Profile image doesn't exist" });
       }
-      let url = profile.profileUrl;
-      if (!url.includes(".")) {
-        url = url + ".jpg";
-      }
-      const fileBuffer = await fs.readFile(url);
-      console.log(fileBuffer);
 
-      res.setHeader("Content-Type", "image/jpg");
-      res.send(fileBuffer);
+      res.setHeader("Content-Type", employee.profileContent.contentType || "image/jpg");
+      return res.send(Buffer.from(employee.profileContent.buffer));
     } catch (error) {
-      console.log(error);
-      res.status(505).json({ error: "Internal error : Image not found!!" });
-      return;
+      console.error("renderEmployeeImage error:", error);
+      return res.status(500).json({ error: "Internal error: Image not found" });
     }
   };
 
   fetchAllComments = async (req: Request, res: Response) => {
     try {
       const postId = req.params.postId;
-      const prisma = new PrismaClient();
+      if (!postId) {
+        return res.status(400).json({ error: "Post ID missing" });
+      }
+
       const comments = await prisma.comment.findMany({
-        where: {
-          postId: postId,
-        },
+        where: { postId },
         include: {
           user: {
             select: {
               name: true,
-              profileUrl: true,
+              profileContent: {
+                select: {
+                  contentType: true,
+                  buffer: true,
+                },
+              },
             },
           },
         },
       });
 
-      if (!comments) {
-        res.status(404).json({ message: "no comments !!" });
-        return;
+      if (!comments || comments.length === 0) {
+        return res.status(404).json({ message: "No comments" });
       }
-      res.status(200).json({ comments });
-      return;
+      return res.status(200).json({ comments });
     } catch (error) {
-      res.status(505).json({ error: "Internal error : Image not found!!" });
-      return;
+      console.error("fetchAllComments error:", error);
+      return res.status(500).json({ error: "Internal error: Comments not found" });
     }
   };
 }

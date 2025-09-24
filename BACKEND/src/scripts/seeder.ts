@@ -1,80 +1,166 @@
-import mongoose from "mongoose";
-import RoleModel from "../models/roleDoc";
-import UserModel from "../models/userDoc";
-import UserRoleModel from "../models/userRoleDoc";
-import { Config } from "../config";
 import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
-import { dummyUser, userdata } from "./data";
-import { uploadPath } from "../path";
+import { userdata } from "./admin";
+import fs from "fs/promises";
+import { employeeData } from "./data";
 
-const AutoCreateUser = async () => {
-  await mongoose.connect(Config.mongodbUrl);
 
-  const userModel = new UserModel();
-  const roleModel = new RoleModel();
-  const userRoleModel = new UserRoleModel();
+const prisma = new PrismaClient();
 
-  userModel.username = userdata.username;
-  userModel.email = userdata.email;
-  if (userModel.profileContent) {
-    userModel.profileContent.url = `${uploadPath}/${
-      Date.now() + userdata.imageName
-    }`;
-    userModel.profileContent.contentType = userdata.contentType;
+const AutoCreateUser = async (userdata: {
+  username: string;
+  email: string;
+  password: string;
+  imageBuffer?: Buffer;
+  contentType?: string;
+  role: "ADMIN" | "SUPER ADMIN";
+}) => {
+  try {
+    const hashPassword = await bcrypt.hash(userdata.password, 10);
+
+    let role = await prisma.role.findFirst({
+      where: { roleName: userdata.role },
+    });
+
+    if (!role) {
+      role = await prisma.role.create({
+        data: {
+          roleName: userdata.role,
+        },
+      });
+    }
+
+    const user = await prisma.user.create({
+      data: {
+        username: userdata.username,
+        email: userdata.email,
+        password: hashPassword,
+      },
+    });
+
+    if (userdata.imageBuffer) {
+      await prisma.userProfileContent.create({
+        data: {
+          buffer: userdata.imageBuffer,
+          contentType: userdata.contentType || "image/png",
+          userId: user.id,
+        },
+      });
+    }
+
+    await prisma.userRole.create({
+      data: {
+        userId: user.id,
+        roleId: role.id,
+      },
+    });
+
+    console.log("✅ Seeded : Auto Generate Entry ", userdata);
+  } catch (err) {
+    console.error("❌ Error seeding user: ", err);
   }
-  const hashPassword = await bcrypt.hash(userdata.password, 10);
-  userModel.password = hashPassword;
-
-  if (userdata.role == "ADMIN") roleModel.roleName = "ADMIN";
-  if (userdata.role == "SUPER ADMIN") roleModel.roleName = "SUPER ADMIN";
-
-  const currentRole = await roleModel.save();
-  userModel.roleId = currentRole._id;
-
-  const user = await userModel.save();
-
-  userRoleModel.roleId = currentRole._id;
-  userRoleModel.userId = user._id;
-
-  await userRoleModel.save();
-
-  console.log("Seeded : Auto Generate Entry ", userdata);
 };
 
+
 const AutoAddEmployee = async () => {
-  const prisma = new PrismaClient();
+  const hashPassword = await bcrypt.hash(employeeData.password, 10);
 
-  console.log("this is the data ", dummyUser);
+  const {
+    personalDetails,
+    contactDetails,
+    addressDetails,
+    indentityDetails, // keeping your spelling
+    ...employeeBase
+  } = employeeData;
 
-  const hashPassword = await bcrypt.hash(dummyUser.password, 10);
-  dummyUser.password = hashPassword;
-
-  const user = await prisma.user.create({
-    data: dummyUser,
-    include: {
-      personalDetails: true,
-      contactDetails: true,
-      addressDetails: true,
-      indentityDetails: {
-        include: {
-          addharDetails: true,
-          panDetails: true,
-        },
-      },
+  // 1. Create employee
+  const employee = await prisma.employee.create({
+    data: {
+      ...employeeBase,
+      password: hashPassword,
     },
   });
 
-  if (!user) {
-    console.log("failed to create user!!");
-    return;
+  // 2. Primary details
+  if (personalDetails?.create) {
+    await prisma.primaryDetails.create({
+      data: {
+        ...personalDetails.create,
+        userId: employee.id,
+      },
+    });
   }
 
-  console.log("user created successfully!!", user);
+  // 3. Contact details
+  if (contactDetails?.create) {
+    await prisma.contactDetails.create({
+      data: {
+        ...contactDetails.create,
+        userId: employee.id,
+      },
+    });
+  }
 
-  return;
+  // 4. Address details
+  if (addressDetails?.create) {
+    await prisma.addressDetails.create({
+      data: {
+        ...addressDetails.create,
+        userId: employee.id,
+      },
+    });
+  }
+
+  // 5. Identity details + Aadhaar + PAN
+  if (indentityDetails?.create) {
+    const identityDetails = await prisma.identityDetails.create({
+      data: {
+        userId: employee.id,
+      },
+    });
+
+    // Aadhaar
+    if (indentityDetails.create.addharDetails?.create) {
+      await prisma.addharDetails.create({
+        data: {
+          ...indentityDetails.create.addharDetails.create,
+          identityId: identityDetails.id, // ✅ FIXED
+        },
+      });
+    }
+
+    // PAN
+    if (indentityDetails.create.panDetails?.create) {
+      await prisma.panCardDetails.create({
+        data: {
+          ...indentityDetails.create.panDetails.create,
+          identityId: identityDetails.id, // ✅ FIXED
+        },
+      });
+    }
+  }
+
+  console.log("✅ Employee created successfully!!", employee);
+  return employee;
 };
 
-// AutoAddEmployee();
 
-// AutoCreateUser();
+
+async function GenerateBuffer() {
+  let newData: any = { ...userdata };
+  if (newData.imagePath) {
+    const buffer = await fs.readFile(newData.imagePath);
+    newData.imageBuffer = buffer;
+  }
+  await AutoCreateUser(newData);
+}
+
+async function main() {
+  await GenerateBuffer();
+  // await AutoAddEmployee();
+  await prisma.$disconnect();
+}
+
+main();
+
+

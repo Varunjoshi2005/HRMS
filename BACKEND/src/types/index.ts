@@ -12,14 +12,13 @@ interface TokenUser {
   role: string;
 }
 
-interface UserDetails {
+interface EmployeeDetails {
   email: string;
   cardId: string;
   workLocation: string;
   name: string;
   designation: string;
   password: string;
-  profileUrl?: string;
   phoneNumber: string;
   role: string;
   businessUnit: string;
@@ -91,7 +90,7 @@ interface PanCardDetails {
 export {
   AuthRequest,
   TokenUser,
-  UserDetails,
+  EmployeeDetails,
   PersonalDetailsProps,
   AddharDetails,
   AddressDetails,

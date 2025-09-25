@@ -10,4 +10,5 @@ export const ApiEndPoints = {
   commentsApi: `${BACKEND_URL}/api/fetch-comments`,
   addCommentApi: `${BACKEND_URL}/post/add-comment`,
   verifyPasscodeApi: `${BACKEND_URL}/api/verify-passcode`,
+  adminLoginApi: `${BACKEND_URL}/account/login`,
 };

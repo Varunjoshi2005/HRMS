@@ -3,6 +3,7 @@ import { ACTIONS } from "../types/index";
 
 interface UserContextPayload {
   user?: any | null;
+  admin?: any | null;
   dispatch: React.Dispatch<React.SetStateAction<Actions>>;
 }
 
@@ -10,6 +11,7 @@ const UserContext = createContext<UserContextPayload | undefined>(undefined);
 
 interface State {
   user: any | null;
+  admin: any | null;
 }
 
 export interface Actions {
@@ -34,6 +36,13 @@ function reducerMethod(state: State, actions: Actions) {
     case ACTIONS.REMOVE_USER: {
       return { ...state, user: null };
     }
+
+    case ACTIONS.SET_ADMIN: {
+      return { ...state, admin: actions.payload };
+    }
+    case ACTIONS.REMOVE_ADMIN: {
+      return { ...state, admin: null };
+    }
     default:
       return state;
   }
@@ -44,7 +53,10 @@ export const UserContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [state, dispatch] = useReducer(reducerMethod, { user: null });
+  const [state, dispatch] = useReducer(reducerMethod, {
+    user: null,
+    admin: null,
+  });
 
   function LoadFromLocalStorage() {
     const user = localStorage.getItem("user-details");

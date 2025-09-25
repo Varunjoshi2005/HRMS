@@ -14,6 +14,8 @@ export interface Employee {
 
 export const ACTIONS = {
   SET_USER: "set-user",
+  SET_ADMIN: "set-admin",
+  REMOVE_ADMIN: "remove-admin",
   REMOVE_USER: "remove-user",
 } as const;
 

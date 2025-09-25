@@ -7,9 +7,10 @@ import { ApiEndPoints } from "@/API";
 
 interface OtpPopupProps {
   userId: string;
+  type: "USER" | "ADMIN";
 }
 
-const OtpPopup: React.FC<OtpPopupProps> = ({ userId }) => {
+const OtpPopup: React.FC<OtpPopupProps> = ({ userId, type }) => {
   const [otp, setOtp] = useState<string[]>(Array(5).fill(""));
   const navigate = useNavigate();
 
@@ -30,8 +31,8 @@ const OtpPopup: React.FC<OtpPopupProps> = ({ userId }) => {
 
   function handleLoginActions(data: any) {
     dispatch({ type: ACTIONS.SET_USER, payload: data });
-    localStorage.setItem("user-details", JSON.stringify(data));
-    navigate("/");
+    localStorage.setItem("admin-details", JSON.stringify(data));
+    navigate("/admin-dashboard");
     return;
   }
 
@@ -50,6 +51,10 @@ const OtpPopup: React.FC<OtpPopupProps> = ({ userId }) => {
       });
       const result = await response.json();
       if (response.ok) {
+        switch (type) {
+          case "ADMIN":
+            handleAdminLoginActions(result.data);
+        }
         handleLoginActions(result.data);
       }
     } catch (error) {
